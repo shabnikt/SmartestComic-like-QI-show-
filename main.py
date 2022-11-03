@@ -8,37 +8,31 @@ customtkinter.set_appearance_mode("dark")  # Modes: system (default), light, dar
 customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
 
 app = customtkinter.CTk()  # create CTk window like you do with the Tk window
-app.geometry('800x400')
-# app.attributes("-fullscreen", True)
+# app.geometry('800x400')
+app.attributes("-fullscreen", True)
 
 
 def table_movement(players_list):
-    temp_players_dict = {float(players_list[0].place_info()['rely']): rely_list[0],
-                    float(players_list[1].place_info()['rely']): rely_list[1],
-                    float(players_list[2].place_info()['rely']): rely_list[2],
-                    float(players_list[3].place_info()['rely']): rely_list[3]}
+    # TODO DISABLE BUTTONS
+    temp_old_relys = [float(_.place_info()['rely']) for _ in players_list]
 
-    temp_active_players = players_list
-    temp_key_list = list(temp_players_dict.keys())
-
-    players_dict = dict()
+    new_relys = list()
     active_players = list()
-    key_list = list()
+    old_relys = list()
 
-    for i in range(len(temp_key_list)):
-        if temp_key_list[i] != temp_players_dict[temp_key_list[i]]:
-            active_players.append(temp_active_players[i])
-            key_list.append(temp_key_list[i])
-            players_dict[temp_key_list[i]] = temp_players_dict[temp_key_list[i]]
+    for i in range(len(temp_old_relys)):
+        if temp_old_relys[i] != rely_list[i]:
+            active_players.append(players_list[i])
+            old_relys.append(temp_old_relys[i])
+            new_relys.append(rely_list[i])
 
-
-    if players_dict:
+    if active_players:
         active_dict = {}
         for j in range(len(active_players)):
-            if key_list[j] < players_dict[key_list[j]]:
-                active_dict[active_players[j]] = float("{:.2f}".format(key_list[j] + 0.03))
+            if old_relys[j] < new_relys[j]:
+                active_dict[active_players[j]] = float("{:.2f}".format(old_relys[j] + 0.03))
             else:
-                active_dict[active_players[j]] = float("{:.2f}".format(key_list[j] - 0.03))  #key_list[j] - 0.03
+                active_dict[active_players[j]] = float("{:.2f}".format(old_relys[j] - 0.03))  #old_relys[j] - 0.03
 
         for player in active_players:
             player.place(relx=0.5, rely=active_dict[player], anchor=customtkinter.CENTER)
