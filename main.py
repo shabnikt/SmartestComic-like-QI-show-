@@ -35,11 +35,10 @@ def table_movement(players_list):
         score_frame.after(25, table_movement, players_list)
 
 
-def upp_score(player):
+def change_score(player, value):
     global score_dict
-    # log.debug(f'old one\n{score_dict}')
-    score_dict[player] += 2
-    # log.debug(f'new one\n{score_dict}')
+    score_dict[player] += value
+    score_labels[list(score_dict.keys()).index(player)].configure(text=score_dict[player])
     sorted_dict = dict(sorted(score_dict.items(), key=lambda item: item[1], reverse=True))
     players_list = list(sorted_dict.keys())
     log.debug(f'sorted one\n{sorted_dict}')
