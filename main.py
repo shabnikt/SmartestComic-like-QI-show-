@@ -75,13 +75,28 @@ for i in range(len(frames_list)):
     frames_list[i].place(**place_dict, rely=rely_list[i])
 
 # BUTTONS
-butt_dict = {"text": "CTkButton"}
-bplace_dict = {"relx": 0.5, "rely": 0.5, "anchor": customtkinter.CENTER}
+butt2_dict = {"text": "", "fg_color": "green"}  # , "width": 50, "height": 28
+butt1_dict = {"text": ""}
+butt_1_dict = {"text": "", "fg_color": "red"}
 
-buttons = [customtkinter.CTkButton(master=frames_list[i], **butt_dict, command=lambda i=i: upp_score(frames_list[i]))
+b2place_dict = {"relwidth": 0.03, "relheight": 0.4, "relx": 0.54, "rely": 0.5, "anchor": customtkinter.CENTER}
+b1place_dict = {"relwidth": 0.03, "relheight": 0.4, "relx": 0.5, "rely": 0.5, "anchor": customtkinter.CENTER}
+b_1place_dict = {"relwidth": 0.03, "relheight": 0.4, "relx": 0.46, "rely": 0.5, "anchor": customtkinter.CENTER}
+
+buttons2 = [customtkinter.CTkButton(master=frames_list[i], **butt2_dict, command=lambda i=i: change_score(frames_list[i], 2))
            for i in range(4)]
-for button in buttons:
-    button.place(**bplace_dict)
+for button in buttons2:
+    button.place(**b2place_dict)
+
+buttons1 = [customtkinter.CTkButton(master=frames_list[i], **butt1_dict, command=lambda i=i: change_score(frames_list[i], 1))
+           for i in range(4)]
+for button in buttons1:
+    button.place(**b1place_dict)
+
+buttons_1 = [customtkinter.CTkButton(master=frames_list[i], **butt_1_dict, command=lambda i=i: change_score(frames_list[i], -1))
+           for i in range(4)]
+for button in buttons_1:
+    button.place(**b_1place_dict)
 
 # LABELS
 names = [os.getenv('NAME1'), os.getenv('NAME2'), os.getenv('NAME3'), os.getenv('NAME4')]
