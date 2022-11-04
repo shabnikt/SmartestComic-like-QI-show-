@@ -57,7 +57,7 @@ app.attributes("-fullscreen", True)
 
 # TABLE FRAMES
 score_frame = customtkinter.CTkFrame(master=app, fg_color="#212325", corner_radius=10)
-score_frame.place(rely=0.5, relwidth=1, relheight=0.5)
+score_frame.place(rely=0.6, relwidth=1, relheight=0.4)
 
 frames_dict = {"master": score_frame, "corner_radius": 10}
 player1 = customtkinter.CTkFrame(**frames_dict)
