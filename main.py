@@ -87,11 +87,15 @@ for button in buttons:
 names = [os.getenv('NAME1'), os.getenv('NAME2'), os.getenv('NAME3'), os.getenv('NAME4')]
 names_dict = {"width": 120, "height": 50, "fg_color": "#2a2d2e", "text_font": ('Arial', 30), "corner_radius": 8}
 lplace_dict = {"relx": 0.1, "rely": 0.5, "anchor": customtkinter.CENTER}
+splace_dict = {"relx": 0.9, "rely": 0.5, "anchor": customtkinter.CENTER}
 
 labels = [customtkinter.CTkLabel(master=frames_list[i], text=names[i], **names_dict) for i in range(4)]
 for label in labels:
     label.place(**lplace_dict)
-# TODO SCORE LABELS
+
+score_labels = [customtkinter.CTkLabel(master=frames_list[i], text=score_dict[frames_list[i]], **names_dict) for i in range(4)]
+for score in score_labels:
+    score.place(**splace_dict)
 
 app.mainloop()
 
