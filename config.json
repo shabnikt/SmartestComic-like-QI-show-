@@ -1,4 +1,7 @@
 {
+  "categories": ["imgs/science.png"],
+
+
   "frames_dict": {"corner_radius": 10},
   "place_dict": {"relx": 0.5, "relwidth": 0.8, "relheight": 0.2},
 

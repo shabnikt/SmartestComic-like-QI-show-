@@ -4,8 +4,22 @@ from func_math import *
 from smartlog import log
 import os
 import json
+from PIL import Image, ImageTk
+from animation import *
 
-log.setLevel('DEBUG')
+
+log.setLevel("DEBUG")
+
+
+# command=lambda: animation(app, score_frame)
+
+
+
+
+
+
+
+
 
 
 def table_movement(players_list):
@@ -56,6 +70,13 @@ customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-bl
 app = customtkinter.CTk()  # create CTk window like you do with the Tk window
 # app.geometry('800x400')
 app.attributes("-fullscreen", True)
+
+
+frame = customtkinter.CTkFrame(master=app, fg_color="#212325", corner_radius=10)
+frame.place(relwidth=1, relheight=0.4)
+
+button = customtkinter.CTkButton(master=frame, text="CTkButton", command=lambda: animation(app, score_frame, frame))
+button.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
 
 
 # TABLE FRAMES
@@ -117,22 +138,17 @@ score_labels = [customtkinter.CTkLabel(master=frames_list[i], text=score_dict[fr
 for score in score_labels:
     score.place(**splace_dict, **anchor_dict)
 
+
+
+
+
 app.mainloop()
 
-# if __name__ == '__main__':
-#     pass
-# https://www.youtube.com/watch?v=6NSjTE--hjw&ab_channel=DJDaveHarris-Topic
-# player1.winfo_rooty()
-
-# with open("config.json", "r", encoding='utf-8') as json_mapping:
-#     config = json.load(json_mapping)
 
 
-# def player_movement(finish):
-#     rely = float(player1.place_info()['rely'])
-#     log.debug(rely)
-#     if rely != finish:
-#         new_rely = rely + 0.03 if rely < finish else rely - 0.03
-#         player1.place(relx=0.5, rely=new_rely, anchor=customtkinter.CENTER)
-#
-#         player1.after(25, player_movement, finish)
+# image1 = Image.open(os.getenv('CIRCLE'))
+# #image1 = image1.resize((500, 500), Image.Resampling.LANCZOS)
+# test = ImageTk.PhotoImage(image1)
+# bglab = tkinter.Label(master=app, background='#212325', image=test)
+# bglab.image = test
+# bglab.place(relx=0.5, rely=0.5, relwidth=1, relheight=1, anchor=customtkinter.CENTER)
