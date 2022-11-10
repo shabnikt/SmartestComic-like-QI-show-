@@ -1,25 +1,9 @@
-import customtkinter
-import tkinter
-from func_math import *
+from func_math import get_rely_list
 from smartlog import log
-import os
-import json
-from PIL import Image, ImageTk
 from animation import *
 
 
 log.setLevel("DEBUG")
-
-
-# command=lambda: animation(app, score_frame)
-
-
-
-
-
-
-
-
 
 
 def table_movement(players_list):
@@ -42,7 +26,7 @@ def table_movement(players_list):
             if old_relys[j] < new_relys[j]:
                 active_dict[active_players[j]] = float("{:.2f}".format(old_relys[j] + 0.03))
             else:
-                active_dict[active_players[j]] = float("{:.2f}".format(old_relys[j] - 0.03))  #old_relys[j] - 0.03
+                active_dict[active_players[j]] = float("{:.2f}".format(old_relys[j] - 0.03))
 
         for player in active_players:
             player.place(relx=0.5, rely=active_dict[player], anchor=customtkinter.CENTER)
@@ -61,14 +45,13 @@ def change_score(player, value):
 
 
 with open("config.json", "r", encoding='utf-8') as json_mapping:
-    config = json.load(json_mapping)
+    config = load(json_mapping)
 
 # MAIN APP
-customtkinter.set_appearance_mode("dark")  # Modes: system (default), light, dark
-customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("blue")
 
-app = customtkinter.CTk()  # create CTk window like you do with the Tk window
-# app.geometry('800x400')
+app = customtkinter.CTk()
 app.attributes("-fullscreen", True)
 
 
@@ -109,18 +92,18 @@ b2place_dict = config["b2place_dict"]
 b1place_dict = config["b1place_dict"]
 b_1place_dict = config["b_1place_dict"]
 
-buttons2 = [customtkinter.CTkButton(master=frames_list[i], **butt2_dict, command=lambda i=i: change_score(frames_list[i], 2))
-           for i in range(4)]
+buttons2 = [customtkinter.CTkButton(master=frames_list[i], **butt2_dict,
+                                    command=lambda i=i: change_score(frames_list[i], 2)) for i in range(4)]
 for button in buttons2:
     button.place(**b2place_dict, **anchor_dict)
 
-buttons1 = [customtkinter.CTkButton(master=frames_list[i], **butt1_dict, command=lambda i=i: change_score(frames_list[i], 1))
-           for i in range(4)]
+buttons1 = [customtkinter.CTkButton(master=frames_list[i], **butt1_dict,
+                                    command=lambda i=i: change_score(frames_list[i], 1)) for i in range(4)]
 for button in buttons1:
     button.place(**b1place_dict, **anchor_dict)
 
-buttons_1 = [customtkinter.CTkButton(master=frames_list[i], **butt_1_dict, command=lambda i=i: change_score(frames_list[i], -1))
-           for i in range(4)]
+buttons_1 = [customtkinter.CTkButton(master=frames_list[i], **butt_1_dict,
+                                     command=lambda i=i: change_score(frames_list[i], -1)) for i in range(4)]
 for button in buttons_1:
     button.place(**b_1place_dict, **anchor_dict)
 
@@ -134,21 +117,10 @@ labels = [customtkinter.CTkLabel(master=frames_list[i], text=names[i], **names_d
 for label in labels:
     label.place(**lplace_dict, **anchor_dict)
 
-score_labels = [customtkinter.CTkLabel(master=frames_list[i], text=score_dict[frames_list[i]], **names_dict) for i in range(4)]
+score_labels = [customtkinter.CTkLabel(master=frames_list[i], text=score_dict[frames_list[i]], **names_dict)
+                for i in range(4)]
 for score in score_labels:
     score.place(**splace_dict, **anchor_dict)
 
 
-
-
-
 app.mainloop()
-
-
-
-# image1 = Image.open(os.getenv('CIRCLE'))
-# #image1 = image1.resize((500, 500), Image.Resampling.LANCZOS)
-# test = ImageTk.PhotoImage(image1)
-# bglab = tkinter.Label(master=app, background='#212325', image=test)
-# bglab.image = test
-# bglab.place(relx=0.5, rely=0.5, relwidth=1, relheight=1, anchor=customtkinter.CENTER)

@@ -1,17 +1,17 @@
 import customtkinter
 import tkinter
 from PIL import Image, ImageTk
-import os
-import json
+from os import getenv
+from json import load
 
 with open("config.json", "r", encoding='utf-8') as json_mapping:
-    categories = json.load(json_mapping)["categories"]
+    categories = load(json_mapping)["categories"]
 
 
 def animation(app, score_frame, frame):
     score_frame.place_forget()
     frame.place_forget()
-    circle_img = Image.open(os.getenv('CIRCLE'))
+    circle_img = Image.open(getenv('CIRCLE'))
     w = 0.04
     size = int(1080 * w)
     circle_img = circle_img.resize((size, size), Image.Resampling.LANCZOS)
@@ -27,7 +27,7 @@ def animation(app, score_frame, frame):
 def circle(app, bglab, score_frame, frame):
     if bglab.place_info()['relwidth'] < '3':
         w = float(bglab.place_info()['relwidth']) + 0.38
-        circle_img = Image.open(os.getenv('CIRCLE'))
+        circle_img = Image.open(getenv('CIRCLE'))
         size = int(1080 * w)
         circle_img = circle_img.resize((size, size), Image.Resampling.LANCZOS)
         img = ImageTk.PhotoImage(circle_img)
@@ -69,7 +69,7 @@ def move_lab(lab, size, app):
 def move_up(lab, size, app):
     if size > 30 or float(lab.place_info()["rely"]) != 0.1:
         size -= 5
-        if float(lab.place_info()["rely"])  != 0.1:
+        if float(lab.place_info()["rely"]) != 0.1:
             rely = float(lab.place_info()["rely"]) - 0.1
         else:
             rely = float(lab.place_info()["rely"])
@@ -134,7 +134,7 @@ def theme_loop(n, app, cat1, border):
 
 
 
-
+#================================================================
 
 #app.after(1000, animend, bglab, score_frame, frame)
 def animend(lab, score_frame, frame):
