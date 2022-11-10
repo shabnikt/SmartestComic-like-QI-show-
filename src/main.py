@@ -1,6 +1,6 @@
-from func_math import get_rely_list
-from smartlog import log
-from animation import *
+from functions.func_math import get_rely_list
+from functions.smartlog import log
+from animation.choose_categories import *
 
 
 log.setLevel("DEBUG")
