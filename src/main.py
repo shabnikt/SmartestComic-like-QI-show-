@@ -31,6 +31,9 @@ def table_movement(players_list):
         for player in active_players:
             player.place(relx=0.5, rely=active_dict[player], anchor=customtkinter.CENTER)
         score_frame.after(25, table_movement, players_list)
+    else:
+        for button in buttons2 + buttons1 + buttons_1:
+            button.configure(state='normal')
 
 
 def change_score(player, value):
@@ -40,6 +43,9 @@ def change_score(player, value):
     sorted_dict = dict(sorted(score_dict.items(), key=lambda item: item[1], reverse=True))
     players_list = list(sorted_dict.keys())
     log.debug(f'sorted one\n{sorted_dict}')
+
+    for button in buttons2+buttons1+buttons_1:
+        button.configure(state='disabled')
 
     table_movement(players_list)
 
@@ -52,7 +58,8 @@ customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("blue")
 
 app = customtkinter.CTk()
-app.attributes("-fullscreen", True)
+app.geometry('800x400')
+# app.attributes("-fullscreen", True)
 
 
 frame = customtkinter.CTkFrame(master=app, fg_color="#212325", corner_radius=10)
