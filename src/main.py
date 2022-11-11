@@ -4,12 +4,12 @@ from functions.smartlog import log
 from animation.choose_categories import *
 
 
-log.setLevel("DEBUG")
+log.setLevel(getenv("LOGLEVEL"))
 cat_dir, categories, cat_dict = get_categories()
+bg = getenv('BG')
 
 
 def table_movement(players_list):
-    # TODO DISABLE BUTTONS
     temp_old_relys = [float(_.place_info()['rely']) for _ in players_list]
 
     new_relys = list()
@@ -63,8 +63,8 @@ app = customtkinter.CTk()
 # app.geometry('800x400')
 app.attributes("-fullscreen", True)
 
-
-frame = customtkinter.CTkFrame(master=app, fg_color="#212325", corner_radius=10)
+# QUESTIONS FRAME
+frame = customtkinter.CTkFrame(master=app, fg_color=bg, corner_radius=10)
 frame.place(relwidth=1, relheight=0.4)
 
 button = customtkinter.CTkButton(master=frame, text="CTkButton",
@@ -72,8 +72,8 @@ button = customtkinter.CTkButton(master=frame, text="CTkButton",
 button.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
 
 
-# TABLE FRAMES
-score_frame = customtkinter.CTkFrame(master=app, fg_color="#212325", corner_radius=10)
+# TABLE FRAME
+score_frame = customtkinter.CTkFrame(master=app, fg_color=bg, corner_radius=10)
 score_frame.place(rely=0.6, relwidth=1, relheight=0.4)
 
 frames_dict = {"master": score_frame}
