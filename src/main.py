@@ -60,8 +60,8 @@ customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("blue")
 
 app = customtkinter.CTk()
-app.geometry('800x400')
-# app.attributes("-fullscreen", True)
+# app.geometry('800x400')
+app.attributes("-fullscreen", True)
 
 
 frame = customtkinter.CTkFrame(master=app, fg_color="#212325", corner_radius=10)
