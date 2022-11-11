@@ -2,6 +2,14 @@ import customtkinter
 import tkinter
 from PIL import Image, ImageTk
 from os import getenv
+from os.path import exists
+from json import dump
+
+
+def save_choose(theme):
+    print(theme)
+    with open('theme.json', 'w') as json_file:
+        dump({"theme": theme}, json_file)
 
 
 def get_img(path, sizex, sizey):
