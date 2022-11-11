@@ -61,27 +61,24 @@ def create_top_label(anim_frame, cat_dict):
 
     font_size = 2
 
-    choose_button = customtkinter.CTkButton(master=top, bg_color=transparent_color, fg_color=transparent_color,
-                                            hover_color=transparent_color, text_font=('Helvetica', 180),
-                                            text_color='red', text='push push push\npush push push\npush push push')
     label = customtkinter.CTkLabel(master=top, text='Выбирает категорию\nНИКИТА', text_font=('Helvetica', font_size),
                                    text_color='#c90f0f', fg_color=transparent_color, bg_color=transparent_color)
     label.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
 
-    resize_label(label, font_size, anim_frame, cat_dict, top, choose_button)
+    resize_label(label, font_size, anim_frame, cat_dict, top)
 
 
-def resize_label(label, font_size, anim_frame, cat_dict, top, choose_button):
+def resize_label(label, font_size, anim_frame, cat_dict, top):
     if font_size < 50:
         font_size += 4
         label.configure(text_font=('Helvetica', font_size))
 
-        label.after(50, resize_label, label, font_size, anim_frame, cat_dict, top, choose_button)
+        label.after(50, resize_label, label, font_size, anim_frame, cat_dict, top)
     else:
-        move_label_up(label, font_size, anim_frame, cat_dict, top, choose_button)
+        move_label_up(label, font_size, anim_frame, cat_dict, top)
 
 
-def move_label_up(label, font_size, anim_frame, cat_dict, top, choose_button):
+def move_label_up(label, font_size, anim_frame, cat_dict, top):
     tempy = float(label.place_info()["rely"])
 
     if font_size > 30 or tempy != 0.1:
@@ -91,17 +88,15 @@ def move_label_up(label, font_size, anim_frame, cat_dict, top, choose_button):
         label.configure(text_font=('Helvetica', font_size))
         label.place(relx=0.5, rely=rely, anchor=customtkinter.CENTER)
 
-        label.after(50, move_label_up, label, font_size, anim_frame, cat_dict, top, choose_button)
+        label.after(50, move_label_up, label, font_size, anim_frame, cat_dict, top)
 
     else:
-        choose_button.place(relx=0.5, rely=0.6, relwidth=1, relheight=0.8, anchor=customtkinter.CENTER)
-
         n = 0
         categories = list(cat_dict.keys())
-        themes_loop(n, anim_frame, categories, cat_dict, top, choose_button)
+        themes_loop(n, anim_frame, categories, cat_dict, top)
 
 
-def themes_loop(n, anim_frame, categories, cat_dict, top, choose_button):
+def themes_loop(n, anim_frame, categories, cat_dict, top):
     n = n if n < len(categories) else 0
 
     curr_width = 0.3
@@ -120,12 +115,12 @@ def themes_loop(n, anim_frame, categories, cat_dict, top, choose_button):
     theme.image = img
     theme.place(relx=0.5, rely=0.5, relwidth=curr_width, relheight=curr_width, anchor=customtkinter.CENTER)
 
-    choose_button.configure(command=lambda: save_choose(categories[n]))
+    theme.bind("<Button-1>", lambda x: save_choose(categories[n]))
 
-    resize_theme(n, anim_frame, theme, border, categories, cat_dict, top, choose_button)
+    resize_theme(n, anim_frame, theme, border, categories, cat_dict, top)
 
 
-def resize_theme(n, anim_frame, theme, border, categories, cat_dict, top, choose_button):
+def resize_theme(n, anim_frame, theme, border, categories, cat_dict, top):
     if theme.place_info()['relwidth'] < '1':
         curr_width = float(theme.place_info()['relwidth']) + 0.1
         border_width = float(border.place_info()['relwidth'])
@@ -144,16 +139,16 @@ def resize_theme(n, anim_frame, theme, border, categories, cat_dict, top, choose
         theme.configure(image=img)
         theme.image = img
 
-        theme.after(1000, resize_theme, n, anim_frame, theme, border, categories, cat_dict, top, choose_button)
+        theme.after(1000, resize_theme, n, anim_frame, theme, border, categories, cat_dict, top)
     else:
         if exists('theme.json'):
-            theme_last_turn(n, anim_frame, categories, cat_dict, top, choose_button)
+            theme_last_turn(n, anim_frame, categories, cat_dict, top)
         else:
             n += 1
-            themes_loop(n, anim_frame, categories, cat_dict, top, choose_button)
+            themes_loop(n, anim_frame, categories, cat_dict, top)
 
 
-def theme_last_turn(n, anim_frame, categories, cat_dict, top, choose_button):
+def theme_last_turn(n, anim_frame, categories, cat_dict, top):
     curr_width = 0.3
     blackx = 0.4
     blacky = (1920 * (blackx - curr_width) / 1080) + curr_width
@@ -171,12 +166,10 @@ def theme_last_turn(n, anim_frame, categories, cat_dict, top, choose_button):
     theme.image = img
     theme.place(relx=0.5, rely=0.5, relwidth=curr_width, relheight=curr_width, anchor=customtkinter.CENTER)
 
-    choose_button.configure(command=lambda: save_choose(categories[n]))
-
-    last_resize(n, anim_frame, theme, border, path, top, choose_button)
+    last_resize(n, anim_frame, theme, border, path, top)
 
 
-def last_resize(n, anim_frame, theme, border, path, top, choose_button):
+def last_resize(n, anim_frame, theme, border, path, top):
     if theme.place_info()['relwidth'] < '1':
         curr_width = float(theme.place_info()['relwidth']) + 0.1
         border_width = float(border.place_info()['relwidth'])
@@ -195,7 +188,7 @@ def last_resize(n, anim_frame, theme, border, path, top, choose_button):
         theme.configure(image=img)
         theme.image = img
 
-        theme.after(1000, last_resize, n, anim_frame, theme, border, path, top, choose_button)
+        theme.after(1000, last_resize, n, anim_frame, theme, border, path, top)
     else:
         end_animation(anim_frame, top)
 
