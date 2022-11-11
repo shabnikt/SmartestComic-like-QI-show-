@@ -1,9 +1,11 @@
 from functions.func_math import get_rely_list
+from functions.take_envs import *
 from functions.smartlog import log
 from animation.choose_categories import *
 
 
 log.setLevel("DEBUG")
+cat_dir, categories, cat_dict = get_categories()
 
 
 def table_movement(players_list):
@@ -32,8 +34,8 @@ def table_movement(players_list):
             player.place(relx=0.5, rely=active_dict[player], anchor=customtkinter.CENTER)
         score_frame.after(25, table_movement, players_list)
     else:
-        for button in buttons2 + buttons1 + buttons_1:
-            button.configure(state='normal')
+        for b in buttons2 + buttons1 + buttons_1:
+            b.configure(state='normal')
 
 
 def change_score(player, value):
@@ -44,8 +46,8 @@ def change_score(player, value):
     players_list = list(sorted_dict.keys())
     log.debug(f'sorted one\n{sorted_dict}')
 
-    for button in buttons2+buttons1+buttons_1:
-        button.configure(state='disabled')
+    for b in buttons2+buttons1+buttons_1:
+        b.configure(state='disabled')
 
     table_movement(players_list)
 
@@ -65,7 +67,8 @@ app.geometry('800x400')
 frame = customtkinter.CTkFrame(master=app, fg_color="#212325", corner_radius=10)
 frame.place(relwidth=1, relheight=0.4)
 
-button = customtkinter.CTkButton(master=frame, text="CTkButton", command=lambda: animation(app, score_frame, frame))
+button = customtkinter.CTkButton(master=frame, text="CTkButton",
+                                 command=lambda: start_cat_anim(app, score_frame, frame, cat_dict))
 button.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
 
 
