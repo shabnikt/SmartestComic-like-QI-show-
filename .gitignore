@@ -6,4 +6,5 @@
 /.idea/SmartifyComic.iml
 /.idea/.gitignore
 /.idea/vcs.xml
-/imgs
+/imgs/
+/media/
