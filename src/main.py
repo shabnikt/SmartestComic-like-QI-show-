@@ -76,9 +76,18 @@ button = customtkinter.CTkButton(master=question_frame, text="CTkButton",
                                  command=lambda: start_cat_anim(app, score_frame, question_frame, cat_dict))
 button.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
 
+# =================================================================================================================
+transparent_color = bg
+
+score_window = customtkinter.CTkToplevel()
+score_window.attributes("-fullscreen", True)
+score_window.attributes('-alpha', 0.6)
+score_window.wm_attributes("-transparentcolor", transparent_color)
+score_window.configure(background=transparent_color)
+score_window.attributes('-topmost', 'true')
 
 # TABLE FRAME
-score_frame = customtkinter.CTkFrame(master=app, fg_color=bg, corner_radius=10)
+score_frame = customtkinter.CTkFrame(master=score_window, fg_color=bg, corner_radius=10)
 score_frame.place(relx=0.5, rely=0.8, relwidth=0.58, relheight=0.35, anchor=customtkinter.CENTER)
 
 frames_dict = {"master": score_frame}
