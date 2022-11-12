@@ -1,6 +1,6 @@
 {
   "frames_dict": {"corner_radius": 10},
-  "place_dict": {"relx": 0.5, "relwidth": 0.8, "relheight": 0.2},
+  "place_dict": {"relx": 0.5, "relwidth": 1, "relheight": 0.2},
 
   "butt2_dict": {"text": "", "fg_color": "green"},
   "butt1_dict": {"text": ""},

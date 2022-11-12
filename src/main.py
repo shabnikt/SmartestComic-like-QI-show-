@@ -1,3 +1,5 @@
+import customtkinter
+
 from functions.func_math import get_rely_list
 from functions.take_envs import *
 from functions.smartlog import log
@@ -58,23 +60,26 @@ with open("config.json", "r", encoding='utf-8') as json_mapping:
 # MAIN APP
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("blue")
-
 app = customtkinter.CTk()
 # app.geometry('800x400')
 app.attributes("-fullscreen", True)
+img = get_img(getenv('BG_IMAGE'), 1920, 1080)
+bg_image = tkinter.Label(master=app, image=img)
+bg_image.place(relx=0.5, rely=0.5, relheight=1, relwidth=1, anchor=customtkinter.CENTER)
+
 
 # QUESTIONS FRAME
-frame = customtkinter.CTkFrame(master=app, fg_color=bg, corner_radius=10)
-frame.place(relwidth=1, relheight=0.4)
+question_frame = customtkinter.CTkFrame(master=app, fg_color='red', corner_radius=10)
+question_frame.place(relx=0.5, rely=0.33, relwidth=0.58, relheight=0.547, anchor=customtkinter.CENTER)
 
-button = customtkinter.CTkButton(master=frame, text="CTkButton",
-                                 command=lambda: start_cat_anim(app, score_frame, frame, cat_dict))
+button = customtkinter.CTkButton(master=question_frame, text="CTkButton",
+                                 command=lambda: start_cat_anim(app, score_frame, question_frame, cat_dict))
 button.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
 
 
 # TABLE FRAME
 score_frame = customtkinter.CTkFrame(master=app, fg_color=bg, corner_radius=10)
-score_frame.place(rely=0.6, relwidth=1, relheight=0.4)
+score_frame.place(relx=0.5, rely=0.8, relwidth=0.58, relheight=0.35, anchor=customtkinter.CENTER)
 
 frames_dict = {"master": score_frame}
 frames_dict.update(config["frames_dict"])
@@ -116,6 +121,8 @@ buttons_1 = [customtkinter.CTkButton(master=frames_list[i], **butt_1_dict,
                                      command=lambda i=i: change_score(frames_list[i], -1)) for i in range(4)]
 for button in buttons_1:
     button.place(**b_1place_dict, **anchor_dict)
+
+
 
 # LABELS
 names = config["names"]
