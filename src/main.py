@@ -63,14 +63,18 @@ customtkinter.set_default_color_theme("blue")
 app = customtkinter.CTk()
 # app.geometry('800x400')
 app.attributes("-fullscreen", True)
-img = get_img(getenv('BG_IMAGE'), 1920, 1080)
-bg_image = tkinter.Label(master=app, image=img)
+bg_img = get_img(getenv('BG_IMAGE'), 1920, 1080)
+bg_image = tkinter.Label(master=app, image=bg_img)
 bg_image.place(relx=0.5, rely=0.5, relheight=1, relwidth=1, anchor=customtkinter.CENTER)
 
 
 # QUESTIONS FRAME
-question_frame = customtkinter.CTkFrame(master=app, fg_color='red', corner_radius=10)
-question_frame.place(relx=0.5, rely=0.33, relwidth=0.58, relheight=0.547, anchor=customtkinter.CENTER)
+question_frame = customtkinter.CTkFrame(master=app, fg_color='#0c3653', bg_color='#000000', corner_radius=10)
+question_frame.place(relx=0.5, rely=0.30, relwidth=0.58, relheight=0.546, anchor=customtkinter.CENTER)
+
+que_img = get_img(getenv('QUESTION_BG'), 1114, 590)
+question_bg = tkinter.Label(master=question_frame, image=que_img)
+question_bg.place(relx=0.5, rely=0.5, relheight=1, relwidth=1, anchor=customtkinter.CENTER)
 
 button = customtkinter.CTkButton(master=question_frame, text="CTkButton",
                                  command=lambda: start_cat_anim(app, score_frame, question_frame, cat_dict))
@@ -88,7 +92,7 @@ score_window.attributes('-topmost', 'true')
 
 # TABLE FRAME
 score_frame = customtkinter.CTkFrame(master=score_window, fg_color=bg, corner_radius=10)
-score_frame.place(relx=0.5, rely=0.8, relwidth=0.58, relheight=0.35, anchor=customtkinter.CENTER)
+score_frame.place(relx=0.5, rely=0.8, relwidth=0.58, relheight=0.4, anchor=customtkinter.CENTER)
 
 frames_dict = {"master": score_frame}
 frames_dict.update(config["frames_dict"])
