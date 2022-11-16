@@ -1,3 +1,5 @@
+import os
+
 import customtkinter
 
 from functions.func_math import get_rely_list
@@ -7,8 +9,18 @@ from animation.choose_categories import *
 
 
 log.setLevel(getenv("LOGLEVEL"))
-cat_dir, categories, cat_dict = get_categories()
 bg = getenv('BG')
+
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("blue")
+
+cat_dir, categories, cat_dict = get_categories()
+
+with open("media/questions.txt", "r", encoding='utf-8') as q_f:
+    questions = get_questions(categories, q_f.read())
+
+with open("config.json", "r", encoding='utf-8') as json_mapping:
+    config = load(json_mapping)
 
 
 def table_movement(players_list):
@@ -54,15 +66,21 @@ def change_score(player, value):
     table_movement(players_list)
 
 
-with open("config.json", "r", encoding='utf-8') as json_mapping:
-    config = load(json_mapping)
+def show_question(event):
+    global categories, cat_dict, questions
+    with open("theme.json", "r", encoding='utf-8') as theme_file:
+        theme_config = load(theme_file)
+    theme = theme_config['theme']
+
+    del cat_dict[theme]
+    del questions[theme]
+    del categories[categories.index(theme)]
+    os.remove('theme.json')
 
 # MAIN APP
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("blue")
 app = customtkinter.CTk()
-# app.geometry('800x400')
 app.attributes("-fullscreen", True)
+
 bg_img = get_img(getenv('BG_IMAGE'), 1920, 1080)
 bg_image = tkinter.Label(master=app, image=bg_img)
 bg_image.place(relx=0.5, rely=0.5, relheight=1, relwidth=1, anchor=customtkinter.CENTER)
@@ -76,9 +94,8 @@ que_img = get_img(getenv('QUESTION_BG'), 1114, 590)
 question_bg = tkinter.Label(master=question_frame, image=que_img)
 question_bg.place(relx=0.5, rely=0.5, relheight=1, relwidth=1, anchor=customtkinter.CENTER)
 
-button = customtkinter.CTkButton(master=question_frame, text="CTkButton",
-                                 command=lambda: start_cat_anim(app, score_frame, question_frame, cat_dict))
-button.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
+question_bg.bind('<Control-Button-1>', lambda event: start_cat_anim(app, score_frame, question_frame, cat_dict))
+question_bg.bind('<Alt-Button-1>', show_question)
 
 # =================================================================================================================
 transparent_color = bg
@@ -89,6 +106,9 @@ score_window.attributes('-alpha', 0.6)
 score_window.wm_attributes("-transparentcolor", transparent_color)
 score_window.configure(background=transparent_color)
 score_window.attributes('-topmost', 'true')
+
+qhost_question_frame = customtkinter.CTkFrame(master=score_window, fg_color=transparent_color, bg_color=transparent_color, corner_radius=10)
+qhost_question_frame.place(relx=0.5, rely=0.30, relwidth=0.58, relheight=0.546, anchor=customtkinter.CENTER)
 
 # TABLE FRAME
 score_frame = customtkinter.CTkFrame(master=score_window, fg_color=bg, corner_radius=10)
