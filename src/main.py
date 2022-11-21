@@ -24,6 +24,15 @@ with open("config.json", "r", encoding='utf-8') as json_mapping:
     config = load(json_mapping)
 
 
+def animate_text(event, text, widget):
+    widget.unbind('<Button-1>')
+    t = widget.cget('text')
+    if t != text:
+        t += text.replace(t, '')[0]
+        widget.configure(text=t)
+        widget.after(40, animate_text, event, text, widget)
+
+
 def choose_set_lab(event):
     with open("theme.json", "r", encoding='utf-8') as theme_file:
         theme = load(theme_file)['theme']
@@ -34,7 +43,7 @@ def choose_set_lab(event):
     for widget in qhost_question_frame.winfo_children():
         widget.destroy()
 
-    question_label = tkinter.Label(master=qhost_question_frame, bg=transparent_color, **que['widget'])
+    question_label = tkinter.Label(master=qhost_question_frame, **que['text'], bg=transparent_color, **que['widget'])
     question_label.place(**que['place'], anchor=tkinter.CENTER)
 
 
@@ -91,8 +100,11 @@ def show_question(event):
         widget.destroy()
 
     question = questions[theme]
-    question_label = tkinter.Label(master=qhost_question_frame, bg=transparent_color, **question['widget'])
+    question_label = tkinter.Label(master=qhost_question_frame, text='', bg=transparent_color, **question['widget'])
     question_label.place(**question['place'], anchor=tkinter.CENTER)
+    text = question_label['text']['text']
+    qhost_question_frame.bind('<Control-Button-3>', lambda e: animate_text(e, text, question_label))
+
 
     del cat_dict[theme]
     del questions[theme]
