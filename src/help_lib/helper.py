@@ -32,7 +32,6 @@ def save_choose(args, used_categories, theme):
     args["finish"] = True
 
 
-
 def get_categories():
     cat_dir = getenv("categories")
     categories = [i.split('1')[0] for i in listdir(cat_dir) if '1' in i]

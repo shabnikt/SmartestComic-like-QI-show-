@@ -73,7 +73,6 @@ def themes_loop(n, args):
 
     sizex = int(1920 * curr_width)
     sizey = int(1080 * curr_width)
-    print(f'{sizex}x{sizey}')
 
     img = get_img(args["cat_dict"][args["categories"][n]][0], sizex, sizey)
 
@@ -109,7 +108,6 @@ def resize_theme(n, theme, args):
 
         sizex = int(1920 * curr_width)
         sizey = int(1080 * (curr_width + height))
-        print(f'{sizex}x{sizey}')
 
         img = get_img(args["cat_dict"][args["categories"][n]][0], sizex, sizey)
 
@@ -124,7 +122,6 @@ def resize_theme(n, theme, args):
             theme_last_turn(n, args)
         else:
             n += 1
-            print()
             themes_loop(n, args)
 
 

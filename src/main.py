@@ -71,7 +71,6 @@ def send_cats(categories, chooser):
             break
 
 
-
 def start_animation(gif):
     global flag
     if flag:
