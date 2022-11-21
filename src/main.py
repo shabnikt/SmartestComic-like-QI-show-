@@ -1,4 +1,5 @@
 import os
+import tkinter
 
 import customtkinter
 
@@ -16,11 +17,25 @@ customtkinter.set_default_color_theme("blue")
 
 cat_dir, categories, cat_dict = get_categories()
 
-with open("media/questions.txt", "r", encoding='utf-8') as q_f:
-    questions = get_questions(categories, q_f.read())
+with open("media/question.json", "r", encoding='utf-8') as json:
+    questions = load(json)
 
 with open("config.json", "r", encoding='utf-8') as json_mapping:
     config = load(json_mapping)
+
+
+def choose_set_lab(event):
+    with open("theme.json", "r", encoding='utf-8') as theme_file:
+        theme = load(theme_file)['theme']
+
+    with open("media/question.json", "r", encoding='utf-8') as json:
+        que = load(json)[theme]
+
+    for widget in qhost_question_frame.winfo_children():
+        widget.destroy()
+
+    question_label = tkinter.Label(master=qhost_question_frame, bg=transparent_color, **que['widget'])
+    question_label.place(**que['place'], anchor=tkinter.CENTER)
 
 
 def table_movement(players_list):
@@ -69,13 +84,21 @@ def change_score(player, value):
 def show_question(event):
     global categories, cat_dict, questions
     with open("theme.json", "r", encoding='utf-8') as theme_file:
-        theme_config = load(theme_file)
-    theme = theme_config['theme']
+        theme = load(theme_file)['theme']
+    print(theme)
+
+    for widget in qhost_question_frame.winfo_children():
+        widget.destroy()
+
+    question = questions[theme]
+    question_label = tkinter.Label(master=qhost_question_frame, bg=transparent_color, **question['widget'])
+    question_label.place(**question['place'], anchor=tkinter.CENTER)
 
     del cat_dict[theme]
     del questions[theme]
     del categories[categories.index(theme)]
     os.remove('theme.json')
+
 
 # MAIN APP
 app = customtkinter.CTk()
@@ -96,6 +119,7 @@ question_bg.place(relx=0.5, rely=0.5, relheight=1, relwidth=1, anchor=customtkin
 
 question_bg.bind('<Control-Button-1>', lambda event: start_cat_anim(app, score_frame, question_frame, cat_dict))
 question_bg.bind('<Alt-Button-1>', show_question)
+question_bg.bind('<Alt-Button-3>', choose_set_lab)
 
 # =================================================================================================================
 transparent_color = bg
