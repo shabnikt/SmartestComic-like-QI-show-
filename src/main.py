@@ -2,6 +2,8 @@ import os
 import tkinter
 
 import customtkinter
+from playsound import playsound
+
 
 from functions.func_math import get_rely_list
 from functions.take_envs import *
@@ -11,7 +13,6 @@ from animation.choose_categories import *
 
 log.setLevel(getenv("LOGLEVEL"))
 bg = getenv('BG')
-
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("blue")
 
@@ -24,13 +25,12 @@ with open("config.json", "r", encoding='utf-8') as json_mapping:
     config = load(json_mapping)
 
 
-def animate_text(event, text, widget):
-    widget.unbind('<Button-1>')
+def animate_text(text, widget):
     t = widget.cget('text')
     if t != text:
         t += text.replace(t, '')[0]
         widget.configure(text=t)
-        widget.after(40, animate_text, event, text, widget)
+        widget.after(40, animate_text, text, widget)
 
 
 def choose_set_lab(event):
@@ -76,6 +76,10 @@ def table_movement(players_list):
             b.configure(state='normal')
 
 
+def play_music(event):
+        playsound('media\smartest_comic.wav')
+
+
 def change_score(player, value):
     global score_dict
     score_dict[player] += value
@@ -103,8 +107,7 @@ def show_question(event):
     question_label = tkinter.Label(master=qhost_question_frame, text='', bg=transparent_color, **question['widget'])
     question_label.place(**question['place'], anchor=tkinter.CENTER)
     text = question['text']
-    qhost_question_frame.bind('<Control-Button-3>', lambda e: animate_text(e, text, question_label))
-
+    animate_text(text, question_label)
 
     del cat_dict[theme]
     del questions[theme]
@@ -132,6 +135,7 @@ question_bg.place(relx=0.5, rely=0.5, relheight=1, relwidth=1, anchor=customtkin
 question_bg.bind('<Control-Button-1>', lambda event: start_cat_anim(app, score_frame, question_frame, cat_dict))
 question_bg.bind('<Alt-Button-1>', show_question)
 question_bg.bind('<Alt-Button-3>', choose_set_lab)
+question_bg.bind('<Button-2>', lambda e: playsound('media\smartest_comic.wav'))
 
 # =================================================================================================================
 transparent_color = bg
