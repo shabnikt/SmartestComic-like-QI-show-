@@ -43,7 +43,7 @@ def choose_set_lab(event):
     for widget in qhost_question_frame.winfo_children():
         widget.destroy()
 
-    question_label = tkinter.Label(master=qhost_question_frame, **que['text'], bg=transparent_color, **que['widget'])
+    question_label = tkinter.Label(master=qhost_question_frame, text=que['text'], bg=transparent_color, **que['widget'])
     question_label.place(**que['place'], anchor=tkinter.CENTER)
 
 
@@ -102,7 +102,7 @@ def show_question(event):
     question = questions[theme]
     question_label = tkinter.Label(master=qhost_question_frame, text='', bg=transparent_color, **question['widget'])
     question_label.place(**question['place'], anchor=tkinter.CENTER)
-    text = question_label['text']['text']
+    text = question['text']
     qhost_question_frame.bind('<Control-Button-3>', lambda e: animate_text(e, text, question_label))
 
 
