@@ -3,8 +3,8 @@ import tkinter
 
 from os import getenv
 from os.path import exists
-from animation import frame_animation
-from helper import get_img, save_choose
+from help_lib.animation import frame_animation
+from help_lib.helper import get_img, save_choose
 
 
 def start_cat_anim(app, score_frame, frame, cat_dict):

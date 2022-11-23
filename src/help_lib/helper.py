@@ -1,5 +1,5 @@
 from PIL import Image, ImageTk
-from os import getenv, listdir
+from os import getenv, listdir, remove
 from json import dump
 
 
@@ -43,3 +43,10 @@ def get_questions(categories, line):
     temp_stuff = [(categories[i], que_list[i].strip()) for i in range(len(categories))]
     questions_dict = {key: value for key, value in temp_stuff}
     return questions_dict
+
+
+def delete_categories(cat_dict, questions, categories, theme):
+    del cat_dict[theme]
+    del questions[theme]
+    del categories[categories.index(theme)]
+    remove('theme.json')

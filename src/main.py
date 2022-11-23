@@ -2,7 +2,7 @@ import os
 from json import load
 from playsound import playsound
 
-from help_lib.helper import get_rely_list, get_categories
+from help_lib.helper import *
 from help_lib.log_formatter import log
 from help_lib.categories_animation import *
 from help_lib.animation import animate_text
@@ -34,14 +34,7 @@ def show_question(event):
     question_label = tkinter.Label(master=qhost_question_frame, text='', bg=transparent_color, **question['widget'])
     question_label.place(**question['place'], anchor=tkinter.CENTER)
     text = question['text']
-    log.debug('Start animated text...')
-    animate_text(text, question_label)
-    log.debug('Start delete all shit...')
-    del cat_dict[theme]
-    del questions[theme]
-    del categories[categories.index(theme)]
-    os.remove('theme.json')
-    log.debug('All shit has been deleted.')
+    animate_text(text, question_label, lambda: delete_categories(cat_dict, questions, categories, theme))
 
 
 # TABLE SCORE MOVEMENT
