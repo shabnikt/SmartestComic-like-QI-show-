@@ -7,7 +7,7 @@ from help_lib.animation import frame_animation
 from help_lib.helper import get_img, save_choose
 
 
-def start_cat_anim(app, score_frame, frame, cat_dict):
+def animate_categories(app, score_frame, frame, cat_dict):
     anim_frame = customtkinter.CTkFrame(master=app, fg_color='#212325')
     anim_frame.place(relx=0.5, rely=0.5, relwidth=1, relheight=1, anchor=customtkinter.CENTER)
 

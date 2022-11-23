@@ -1,4 +1,3 @@
-import os
 from json import load
 from playsound import playsound
 
@@ -6,6 +5,17 @@ from help_lib.helper import *
 from help_lib.log_formatter import log
 from help_lib.categories_animation import *
 from help_lib.animation import animate_text
+
+
+def choose_category(event):
+    score_frame.place_forget()
+    for widget in qhost_question_frame.winfo_children():
+        widget.destroy()
+
+    if categories:
+        animate_categories(app, score_frame, question_frame, cat_dict)
+    else:
+        log.warning("That's all, folks!")
 
 
 def choose_set_lab(event):
@@ -113,7 +123,7 @@ que_img = get_img(getenv('QUESTION_BG'), 1114, 590)
 question_bg = tkinter.Label(master=question_frame, image=que_img)
 question_bg.place(relx=0.5, rely=0.5, relheight=1, relwidth=1, anchor=customtkinter.CENTER)
 
-question_bg.bind('<Control-Button-1>', lambda event: start_cat_anim(app, score_frame, question_frame, cat_dict))
+question_bg.bind('<Control-Button-1>', choose_category)
 question_bg.bind('<Alt-Button-1>', show_question)
 question_bg.bind('<Alt-Button-3>', choose_set_lab)
 question_bg.bind('<Control-Button-2>', lambda e: playsound(getenv('MUSIC')))
