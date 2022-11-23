@@ -4,40 +4,21 @@ import tkinter
 from os import getenv
 from os.path import exists
 from help_lib.animation import frame_animation
-from help_lib.helper import get_img, save_choose
+from help_lib.helper import get_img, save_choose, get_frames
 
 
 def animate_categories(app, score_frame, frame, cat_dict):
     anim_frame = customtkinter.CTkFrame(master=app, fg_color='#212325')
     anim_frame.place(relx=0.5, rely=0.5, relwidth=1, relheight=1, anchor=customtkinter.CENTER)
 
-    curr_width = 0.04
-    size = int(1080 * curr_width)
+    img = get_img(getenv('BG_IMAGE'))
+    anim_bg = tkinter.Label(master=anim_frame, image=img)
+    anim_bg.place(relx=0.5, rely=0.5, relwidth=1, relheight=1, anchor=customtkinter.CENTER)
+    anim_bg.image = img
 
-    img = get_img(getenv('CIRCLE'), size, size)
-
-    bglab = tkinter.Label(master=anim_frame, background='#212325', image=img)
-    bglab.image = img
-    bglab.place(relx=0.5, rely=0.5, relwidth=curr_width, relheight=curr_width, anchor=customtkinter.CENTER)
-
-    resize_circle(anim_frame, bglab, score_frame, frame, cat_dict)
-
-
-def resize_circle(anim_frame, bglab, score_frame, frame, cat_dict):
-    if bglab.place_info()['relwidth'] < '3':
-        curr_width = float(bglab.place_info()['relwidth']) + 0.38
-        size = int(1080 * curr_width)
-
-        img = get_img(getenv('CIRCLE'), size, size)
-
-        bglab.place(relx=0.5, rely=0.5, relwidth=curr_width, relheight=curr_width, anchor=customtkinter.CENTER)
-        bglab.configure(image=img)
-        bglab.image = img
-
-        bglab.after(16, resize_circle, anim_frame, bglab, score_frame, frame, cat_dict)
-    else:
-        pass
-        create_top_level(anim_frame, cat_dict)
+    frame_animation(anim_bg,
+                    lambda: create_top_level(anim_frame, cat_dict),
+                    get_frames(getenv("CIRCLE")))
 
 
 def create_top_level(anim_frame, cat_dict):

@@ -4,12 +4,14 @@ from os import listdir
 from help_lib.helper import get_img
 
 
-def frame_animation(widget, frames, frame_num=0, duration=42):
+def frame_animation(widget, next_func, frames, frame_num=0, duration=42):
     if frame_num < len(frames):
         img = get_img(frames[frame_num])
         widget.configure(image=img)
         widget.image = img
-        widget.after(duration, frame_animation, widget, frames, frame_num + 1, duration)
+        widget.after(duration, frame_animation, widget, next_func, frames, frame_num + 1, duration)
+    else:
+        next_func()
 
 
 def animate_text(text, widget, next_func):
