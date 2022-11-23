@@ -1,23 +1,10 @@
 import customtkinter
 import tkinter
-from PIL import Image, ImageTk
+
 from os import getenv
 from os.path import exists
-from json import dump
 from animation import frame_animation
-
-
-def save_choose(theme):
-    print(theme)
-    with open('theme.json', 'w') as json_file:
-        dump({"theme": theme}, json_file)
-
-
-def get_img(path, sizex, sizey):
-    circle_img = Image.open(path)
-    circle_img = circle_img.resize((sizex, sizey), Image.Resampling.LANCZOS)
-    img = ImageTk.PhotoImage(circle_img)
-    return img
+from helper import get_img, save_choose
 
 
 def start_cat_anim(app, score_frame, frame, cat_dict):

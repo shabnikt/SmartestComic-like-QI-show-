@@ -1,8 +1,8 @@
 import os
+from json import load
 from playsound import playsound
 
-from help_lib.func_math import get_rely_list
-from help_lib.take_envs import *
+from help_lib.helper import get_rely_list, get_categories
 from help_lib.log_formatter import log
 from help_lib.categories_animation import *
 
