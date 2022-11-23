@@ -1,7 +1,4 @@
 import os
-import tkinter
-
-import customtkinter
 from playsound import playsound
 
 
@@ -135,7 +132,7 @@ question_bg.place(relx=0.5, rely=0.5, relheight=1, relwidth=1, anchor=customtkin
 question_bg.bind('<Control-Button-1>', lambda event: start_cat_anim(app, score_frame, question_frame, cat_dict))
 question_bg.bind('<Alt-Button-1>', show_question)
 question_bg.bind('<Alt-Button-3>', choose_set_lab)
-question_bg.bind('<Button-2>', lambda e: playsound('media\smartest_comic.wav'))
+question_bg.bind('<Button-2>', lambda e: playsound(getenv('MUSIC')))
 
 # =================================================================================================================
 transparent_color = bg
