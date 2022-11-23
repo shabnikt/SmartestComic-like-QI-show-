@@ -1,11 +1,10 @@
 import os
 from playsound import playsound
 
-
-from functions.func_math import get_rely_list
-from functions.take_envs import *
-from functions.smartlog import log
-from animation.choose_categories import *
+from help_lib.func_math import get_rely_list
+from help_lib.take_envs import *
+from help_lib.log_formatter import log
+from help_lib.categories_animation import *
 
 
 log.setLevel(getenv("LOGLEVEL"))

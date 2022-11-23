@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 from os import getenv
 from os.path import exists
 from json import dump
+from animation import frame_animation
 
 
 def save_choose(theme):
