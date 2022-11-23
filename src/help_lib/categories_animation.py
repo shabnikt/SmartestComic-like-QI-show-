@@ -37,10 +37,10 @@ def resize_circle(anim_frame, bglab, score_frame, frame, cat_dict):
         bglab.after(16, resize_circle, anim_frame, bglab, score_frame, frame, cat_dict)
     else:
         pass
-        create_top_label(anim_frame, cat_dict)
+        create_top_level(anim_frame, cat_dict)
 
 
-def create_top_label(anim_frame, cat_dict):
+def create_top_level(anim_frame, cat_dict):
     transparent_color = '#b71111'
     top = customtkinter.CTkToplevel(anim_frame, fg_color=transparent_color)
     top.attributes("-fullscreen", True)

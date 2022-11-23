@@ -12,7 +12,7 @@ def get_rely_list(relheight, players=4):
     return rely_list
 
 
-def get_img(path, sizex, sizey):
+def get_img(path, sizex=1920, sizey=1080):
     circle_img = Image.open(path)
     circle_img = circle_img.resize((sizex, sizey), Image.Resampling.LANCZOS)
     img = ImageTk.PhotoImage(circle_img)
@@ -31,6 +31,11 @@ def get_categories():
     temp_stuff = [(c, (f"{cat_dir}/{c}1.png", f"{cat_dir}/{c}2.png")) for c in categories]
     cat_dict = {key: value for key, value in temp_stuff}
     return cat_dir, categories, cat_dict
+
+
+def get_frames(folder):
+    frames = [f"{folder}/{frame}" for frame in listdir(folder)]
+    return sorted(frames)
 
 
 def get_questions(categories, line):

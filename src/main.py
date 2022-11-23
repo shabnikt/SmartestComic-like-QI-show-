@@ -5,33 +5,11 @@ from playsound import playsound
 from help_lib.helper import get_rely_list, get_categories
 from help_lib.log_formatter import log
 from help_lib.categories_animation import *
-
-
-log.setLevel(getenv("LOGLEVEL"))
-bg = getenv('BG')
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("blue")
-
-cat_dir, categories, cat_dict = get_categories()
-
-with open("media/question.json", "r", encoding='utf-8') as json:
-    questions = load(json)
-
-with open("config.json", "r", encoding='utf-8') as json_mapping:
-    config = load(json_mapping)
-
-
-def animate_text(text, widget):
-    t = widget.cget('text')
-    if t != text:
-        t += text.replace(t, '')[0]
-        widget.configure(text=t)
-        widget.after(40, animate_text, text, widget)
+from help_lib.animation import animate_text
 
 
 def choose_set_lab(event):
-    with open("theme.json", "r", encoding='utf-8') as theme_file:
-        theme = load(theme_file)['theme']
+    theme = getenv('TEMP_CAT')
 
     with open("media/question.json", "r", encoding='utf-8') as json:
         que = load(json)[theme]
@@ -43,6 +21,30 @@ def choose_set_lab(event):
     question_label.place(**que['place'], anchor=tkinter.CENTER)
 
 
+def show_question(event):
+    global categories, cat_dict, questions
+    with open("theme.json", "r", encoding='utf-8') as theme_file:
+        theme = load(theme_file)['theme']
+    print(theme)
+
+    for widget in qhost_question_frame.winfo_children():
+        widget.destroy()
+
+    question = questions[theme]
+    question_label = tkinter.Label(master=qhost_question_frame, text='', bg=transparent_color, **question['widget'])
+    question_label.place(**question['place'], anchor=tkinter.CENTER)
+    text = question['text']
+    log.debug('Start animated text...')
+    animate_text(text, question_label)
+    log.debug('Start delete all shit...')
+    del cat_dict[theme]
+    del questions[theme]
+    del categories[categories.index(theme)]
+    os.remove('theme.json')
+    log.debug('All shit has been deleted.')
+
+
+# TABLE SCORE MOVEMENT
 def table_movement(players_list):
     temp_old_relys = [float(_.place_info()['rely']) for _ in players_list]
 
@@ -72,10 +74,6 @@ def table_movement(players_list):
             b.configure(state='normal')
 
 
-def play_music(event):
-        playsound('media\smartest_comic.wav')
-
-
 def change_score(player, value):
     global score_dict
     score_dict[player] += value
@@ -90,25 +88,19 @@ def change_score(player, value):
     table_movement(players_list)
 
 
-def show_question(event):
-    global categories, cat_dict, questions
-    with open("theme.json", "r", encoding='utf-8') as theme_file:
-        theme = load(theme_file)['theme']
-    print(theme)
+# VARIABLES
+log.setLevel(getenv("LOGLEVEL"))
+bg = getenv('BG')
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("blue")
 
-    for widget in qhost_question_frame.winfo_children():
-        widget.destroy()
+cat_dir, categories, cat_dict = get_categories()
 
-    question = questions[theme]
-    question_label = tkinter.Label(master=qhost_question_frame, text='', bg=transparent_color, **question['widget'])
-    question_label.place(**question['place'], anchor=tkinter.CENTER)
-    text = question['text']
-    animate_text(text, question_label)
+with open("media/question.json", "r", encoding='utf-8') as json:
+    questions = load(json)
 
-    del cat_dict[theme]
-    del questions[theme]
-    del categories[categories.index(theme)]
-    os.remove('theme.json')
+with open("config.json", "r", encoding='utf-8') as json_mapping:
+    config = load(json_mapping)
 
 
 # MAIN APP
@@ -131,7 +123,7 @@ question_bg.place(relx=0.5, rely=0.5, relheight=1, relwidth=1, anchor=customtkin
 question_bg.bind('<Control-Button-1>', lambda event: start_cat_anim(app, score_frame, question_frame, cat_dict))
 question_bg.bind('<Alt-Button-1>', show_question)
 question_bg.bind('<Alt-Button-3>', choose_set_lab)
-question_bg.bind('<Button-2>', lambda e: playsound(getenv('MUSIC')))
+question_bg.bind('<Control-Button-2>', lambda e: playsound(getenv('MUSIC')))
 
 # =================================================================================================================
 transparent_color = bg
