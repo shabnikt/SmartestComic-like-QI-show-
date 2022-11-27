@@ -25,7 +25,7 @@ def choose_category(event):
 def choose_set_lab(event):
     theme = getenv('TEMP_CAT')
 
-    with open("media/question.json", "r", encoding='utf-8') as json:
+    with open(getenv('QUESTIONS'), "r", encoding='utf-8') as json:
         que = load(json)[theme]
 
     for widget in qhost_question_frame.winfo_children():
@@ -103,7 +103,7 @@ customtkinter.set_default_color_theme("blue")
 
 cat_dir, categories, cat_dict = get_categories()
 
-with open("media/question.json", "r", encoding='utf-8') as json:
+with open(getenv('QUESTIONS'), "r", encoding='utf-8') as json:
     questions = load(json)
 
 with open("config.json", "r", encoding='utf-8') as json_mapping:
