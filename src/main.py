@@ -1,10 +1,9 @@
 from json import load
-from playsound import playsound
 
 from help_lib.helper import *
 from help_lib.log_formatter import log
 from help_lib.categories_animation import *
-from help_lib.animation import animate_text
+from help_lib.animation import animate_text, frame_animation
 
 
 def choose_category(event):
@@ -15,7 +14,12 @@ def choose_category(event):
     if categories:
         animate_categories(app, score_frame, question_frame, cat_dict)
     else:
-        log.warning("That's all, folks!")
+        play_sound(getenv('FINALE'))
+
+        end_bg = tkinter.Label(master=app)
+        end_bg.place(relx=0.5, rely=0.5, relwidth=1, relheight=1, anchor=customtkinter.CENTER)
+
+        frame_animation(getenv("BIDEN"), end_bg, app)
 
 
 def choose_set_lab(event):
@@ -126,7 +130,7 @@ question_bg.place(relx=0.5, rely=0.5, relheight=1, relwidth=1, anchor=customtkin
 question_bg.bind('<Control-Button-1>', choose_category)
 question_bg.bind('<Alt-Button-1>', show_question)
 question_bg.bind('<Alt-Button-3>', choose_set_lab)
-question_bg.bind('<Control-Button-2>', lambda e: playsound(getenv('MUSIC')))
+question_bg.bind('<Control-Button-2>', lambda e: play_sound(getenv('THEME')))
 
 # =================================================================================================================
 transparent_color = bg

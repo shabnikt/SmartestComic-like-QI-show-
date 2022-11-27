@@ -16,9 +16,9 @@ def animate_categories(app, score_frame, frame, cat_dict):
     anim_bg.place(relx=0.5, rely=0.5, relwidth=1, relheight=1, anchor=customtkinter.CENTER)
     anim_bg.image = img
 
-    frame_animation(anim_bg,
-                    lambda: create_top_level(anim_frame, cat_dict),
-                    get_frames(getenv("CIRCLE")))
+    frame_animation(getenv("CIRCLE"), anim_bg, app, (1920, 1080))
+
+    create_top_level(anim_frame, cat_dict)
 
 
 def create_top_level(anim_frame, cat_dict):

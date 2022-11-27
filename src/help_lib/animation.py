@@ -24,11 +24,11 @@ def test_frame_animation2(widget, next_func, frames, frame_num=0, duration=12):
         next_func()
 
 
-def frame_animation(gif, label, window):
+def frame_animation(gif, label, window, size=(1920, 1080)):
     video = Image.open(gif)
 
     for img in ImageSequence.Iterator(video):
-        img = img.resize((1540, 865), Image.Resampling.LANCZOS)
+        img = img.resize(size, Image.Resampling.LANCZOS)
         img = ImageTk.PhotoImage(img)
 
         label.configure(image=img)

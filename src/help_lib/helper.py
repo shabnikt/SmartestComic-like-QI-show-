@@ -1,6 +1,12 @@
 from PIL import Image, ImageTk, ImageSequence
 from os import getenv, listdir, remove
 from json import dump
+from playsound import playsound
+import threading
+
+
+def play_sound(song):
+    threading.Thread(target=playsound, args=(song,), daemon=True).start()
 
 
 def get_rely_list(relheight, players=4):
