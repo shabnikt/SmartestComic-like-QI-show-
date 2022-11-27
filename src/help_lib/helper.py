@@ -1,4 +1,4 @@
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageSequence
 from os import getenv, listdir, remove
 from json import dump
 
