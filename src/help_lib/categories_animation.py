@@ -7,9 +7,10 @@ from help_lib.animation import frame_animation
 from help_lib.helper import get_img, save_choose, get_frames
 
 
-def animate_categories(app, score_frame, frame, cat_dict):
+def animate_categories(app, args):
     anim_frame = customtkinter.CTkFrame(master=app, fg_color='#212325')
     anim_frame.place(relx=0.5, rely=0.5, relwidth=1, relheight=1, anchor=customtkinter.CENTER)
+    args["anim_frame"] = anim_frame
 
     img = get_img(getenv('BG_IMAGE'))
     anim_bg = tkinter.Label(master=anim_frame, image=img)
@@ -18,36 +19,37 @@ def animate_categories(app, score_frame, frame, cat_dict):
 
     frame_animation(getenv("CIRCLE"), anim_bg, app, (1920, 1080))
 
-    create_top_level(anim_frame, cat_dict)
+    create_top_level(args)
 
 
-def create_top_level(anim_frame, cat_dict):
+def create_top_level(args):
     transparent_color = '#fcfcfc'
-    top = customtkinter.CTkToplevel(anim_frame, fg_color=transparent_color)
+    top = customtkinter.CTkToplevel(args["anim_frame"], fg_color=transparent_color)
     top.attributes("-fullscreen", True)
     top.wm_attributes("-transparentcolor", transparent_color)
     top.attributes('-topmost', 'true')
+    args["top"] = top
 
     font_size = 2
 
-    label = customtkinter.CTkLabel(master=top, text='Выбирает категорию\nНИКИТА', text_font=('Helvetica', font_size),
+    label = customtkinter.CTkLabel(master=top, text=f'Выбирает категорию\n{args["chooser"]}', text_font=('Helvetica', font_size),
                                    text_color='#ffffff', fg_color=transparent_color, bg_color=transparent_color)
     label.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
 
-    resize_label(label, font_size, anim_frame, cat_dict, top)
+    resize_label(label, font_size, args)
 
 
-def resize_label(label, font_size, anim_frame, cat_dict, top):
+def resize_label(label, font_size, args):
     if font_size < 50:
         font_size += 4
         label.configure(text_font=('Helvetica', font_size))
 
-        label.after(50, resize_label, label, font_size, anim_frame, cat_dict, top)
+        label.after(50, resize_label, label, font_size, args)
     else:
-        move_label_up(label, font_size, anim_frame, cat_dict, top)
+        move_label_up(label, font_size, args)
 
 
-def move_label_up(label, font_size, anim_frame, cat_dict, top):
+def move_label_up(label, font_size, args):
     tempy = float(label.place_info()["rely"])
 
     if font_size > 30 or tempy != 0.1:
@@ -57,16 +59,15 @@ def move_label_up(label, font_size, anim_frame, cat_dict, top):
         label.configure(text_font=('Helvetica', font_size))
         label.place(relx=0.5, rely=rely, anchor=customtkinter.CENTER)
 
-        label.after(50, move_label_up, label, font_size, anim_frame, cat_dict, top)
+        label.after(50, move_label_up, label, font_size, args)
 
     else:
         n = 0
-        categories = list(cat_dict.keys())
-        themes_loop(n, anim_frame, categories, cat_dict, top)
+        themes_loop(n, args)
 
 
-def themes_loop(n, anim_frame, categories, cat_dict, top):
-    n = n if n < len(categories) else 0
+def themes_loop(n, args):
+    n = n if n < len(args["categories"]) else 0
 
     curr_width = 0.3
 
@@ -74,18 +75,18 @@ def themes_loop(n, anim_frame, categories, cat_dict, top):
     sizey = int(1080 * curr_width)
     print(f'{sizex}x{sizey}')
 
-    img = get_img(cat_dict[categories[n]][0], sizex, sizey)
+    img = get_img(args["cat_dict"][args["categories"][n]][0], sizex, sizey)
 
-    theme = tkinter.Label(master=anim_frame, background='black', image=img)
+    theme = tkinter.Label(master=args["anim_frame"], background='black', image=img)
     theme.image = img
     theme.place(relx=0.5, rely=0.5, relwidth=curr_width, relheight=curr_width, anchor=customtkinter.CENTER)
 
-    theme.bind("<Button-1>", lambda x: save_choose(categories[n]))
+    theme.bind("<Button-1>", lambda x: save_choose(args["categories"][n]))
 
-    resize_theme(n, anim_frame, theme, categories, cat_dict, top)
+    resize_theme(n, theme, args)
 
 
-def resize_theme(n, anim_frame, theme, categories, cat_dict, top):
+def resize_theme(n, theme, args):
     while theme.place_info()['relwidth'] < '1.1':
         prev_width = float(theme.place_info()['relwidth'])
         if prev_width >= 1:
@@ -99,7 +100,7 @@ def resize_theme(n, anim_frame, theme, categories, cat_dict, top):
             height = 0.04
         elif prev_width >= 0.6:
             step = 0.1
-            height = 0
+            height = 0.02
         else:
             step = 0.2
             height = 0
@@ -110,40 +111,39 @@ def resize_theme(n, anim_frame, theme, categories, cat_dict, top):
         sizey = int(1080 * (curr_width + height))
         print(f'{sizex}x{sizey}')
 
-        img = get_img(cat_dict[categories[n]][0], sizex, sizey)
+        img = get_img(args["cat_dict"][args["categories"][n]][0], sizex, sizey)
 
         theme.place(relx=0.5, rely=0.5, relwidth=curr_width, relheight=curr_width, anchor=customtkinter.CENTER)
         theme.configure(image=img)
         theme.image = img
 
-        anim_frame.update()
+        args["anim_frame"].update()
 
     else:
         if exists('theme.json'):
-            theme_last_turn(n, anim_frame, categories, cat_dict, top)
+            theme_last_turn(n, args)
         else:
             n += 1
             print()
-            themes_loop(n, anim_frame, categories, cat_dict, top)
+            themes_loop(n, args)
 
 
-def theme_last_turn(n, anim_frame, categories, cat_dict, top):
+def theme_last_turn(n, args):
     curr_width = 0.4
-
     sizex = int(1920 * curr_width)
     sizey = int(1080 * curr_width)
 
-    path = cat_dict[categories[n]][1]
+    path = args["cat_dict"][args["categories"][n]][1]
     img = get_img(path, sizex, sizey)
 
-    theme = tkinter.Label(master=anim_frame, background='#212325', image=img)
+    theme = tkinter.Label(master=args["anim_frame"], background='#212325', image=img)
     theme.image = img
     theme.place(relx=0.5, rely=0.5, relwidth=curr_width, relheight=curr_width, anchor=customtkinter.CENTER)
 
-    last_resize(n, anim_frame, theme, path, top)
+    last_resize(n, theme, path, args)
 
 
-def last_resize(n, anim_frame, theme, path, top):
+def last_resize(n, theme, path, args):
     while theme.place_info()['relwidth'] < '1':
         prev_width = float(theme.place_info()['relwidth'])
         if prev_width in (0.6, 0.7, 0.8):
@@ -164,13 +164,13 @@ def last_resize(n, anim_frame, theme, path, top):
         theme.configure(image=img)
         theme.image = img
 
-        anim_frame.update()
-
+        args["anim_frame"].update()
     else:
-        end_animation(anim_frame, top)
+        end_animation(args)
 
 
-def end_animation(anim_frame, top):
-    anim_frame.destroy()
-    top.destroy()
+def end_animation(args):
+    args["anim_frame"].destroy()
+    args["top"].destroy()
+    args["score_frame"].place(relx=0.5, rely=0.8, relwidth=0.58, relheight=0.4, anchor=customtkinter.CENTER)
 

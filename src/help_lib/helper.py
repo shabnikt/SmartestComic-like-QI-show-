@@ -3,6 +3,7 @@ from os import getenv, listdir, remove
 from json import dump
 from playsound import playsound
 import threading
+from random import sample
 
 
 def play_sound(song):

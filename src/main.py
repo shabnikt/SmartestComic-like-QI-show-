@@ -7,12 +7,15 @@ from help_lib.animation import animate_text, frame_animation
 
 
 def choose_category(event):
+    global choosers
     score_frame.place_forget()
     for widget in qhost_question_frame.winfo_children():
         widget.destroy()
 
     if categories:
-        animate_categories(app, score_frame, question_frame, cat_dict)
+        args = {"score_frame": score_frame, "categories": sample(categories, 3), "cat_dict": cat_dict, "chooser": choosers[0]}
+        animate_categories(app, args)
+        choosers = choosers[1:] + [choosers[0]]
     else:
         play_sound(getenv('FINALE'))
 
@@ -192,9 +195,9 @@ for button in buttons_1:
     button.place(**b_1place_dict, **anchor_dict)
 
 
-
 # LABELS
 names = config["names"]
+choosers = names
 names_dict = config["names_dict"]
 lplace_dict = config["lplace_dict"]
 splace_dict = config["splace_dict"]
