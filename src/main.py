@@ -24,7 +24,7 @@ def choose_category(event):
     for widget in qhost_question_frame.winfo_children():
         widget.destroy()
 
-    if categories:
+    if len(used_categories) < 7:
         args = {"score_frame": score_frame, "categories": sample(set(categories) - set(used_categories), 3),
                 "cat_dict": cat_dict, "chooser": choosers[0], "used": used_categories, 'finish': False}
         animate_categories(app, args)
