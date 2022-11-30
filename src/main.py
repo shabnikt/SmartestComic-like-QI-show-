@@ -131,6 +131,7 @@ question_bg.bind('<Control-Button-1>', choose_category)
 question_bg.bind('<Alt-Button-1>', show_question)
 question_bg.bind('<Alt-Button-3>', choose_set_lab)
 question_bg.bind('<Control-Button-2>', lambda e: play_sound(getenv('THEME')))
+question_bg.bind('<Control-Alt-Button-2>', lambda e: play_sound(getenv('LOSER')))
 
 # =================================================================================================================
 transparent_color = bg
