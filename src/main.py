@@ -9,6 +9,8 @@ from help_lib.animation import animate_text, frame_animation
 def choose_category(event):
     global choosers
     score_frame.place_forget()
+    question_bg.configure(image=que_img)
+    question_bg.image = que_img
     for widget in qhost_question_frame.winfo_children():
         widget.destroy()
 
@@ -28,6 +30,9 @@ def choose_category(event):
 def choose_set_lab(event):
     theme = getenv('TEMP_CAT')
 
+    question_bg.configure(image=que_img)
+    question_bg.image = que_img
+
     with open(getenv('QUESTIONS'), "r", encoding='utf-8') as json:
         que = load(json)[theme]
 
@@ -38,8 +43,20 @@ def choose_set_lab(event):
     question_label.place(**que['place'], anchor=tkinter.CENTER)
 
 
+def show_image(event):
+    for widget in qhost_question_frame.winfo_children():
+        widget.destroy()
+    img = get_img('media/categories/cats1.png')
+    question_bg.configure(image=img)
+    question_bg.image = img
+
+
 def show_question(event):
     global categories, cat_dict, questions
+
+    question_bg.configure(image=que_img)
+    question_bg.image = que_img
+
     with open("theme.json", "r", encoding='utf-8') as theme_file:
         theme = load(theme_file)['theme']
     print(theme)
@@ -132,9 +149,10 @@ question_bg.place(relx=0.5, rely=0.5, relheight=1, relwidth=1, anchor=customtkin
 
 question_bg.bind('<Control-Button-1>', choose_category)
 question_bg.bind('<Alt-Button-1>', show_question)
-question_bg.bind('<Alt-Button-3>', choose_set_lab)
-question_bg.bind('<Control-Button-2>', lambda e: play_sound(getenv('THEME')))
-question_bg.bind('<Control-Alt-Button-2>', lambda e: play_sound(getenv('LOSER')))
+question_bg.bind('<Alt-Button-3>', show_image)
+question_bg.bind('<Alt-Button-2>', choose_set_lab)
+question_bg.bind('<Control-Button-3>', lambda e: play_sound(getenv('THEME')))
+question_bg.bind('<Control-Alt-Button-3>', lambda e: play_sound(getenv('LOSER')))
 
 # =================================================================================================================
 transparent_color = bg
