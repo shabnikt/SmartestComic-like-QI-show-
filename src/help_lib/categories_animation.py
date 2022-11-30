@@ -144,19 +144,28 @@ def theme_last_turn(n, args):
 
 
 def last_resize(n, theme, path, args):
-    while theme.place_info()['relwidth'] < '1':
+    while theme.place_info()['relwidth'] < '1.1':
         prev_width = float(theme.place_info()['relwidth'])
-        if prev_width in (0.6, 0.7, 0.8):
-            step = 0.1
+        if prev_width >= 1:
+            step = 0.05
+            height = 0.08
         elif prev_width >= 0.9:
-            step = 0.025
+            step = 0.05
+            height = 0.06
+        elif prev_width >= 0.8:
+            step = 0.05
+            height = 0.04
+        elif prev_width >= 0.6:
+            step = 0.1
+            height = 0.02
         else:
             step = 0.2
+            height = 0
 
         curr_width = prev_width + step
 
         sizex = int(1920 * curr_width)
-        sizey = int(1080 * curr_width)
+        sizey = int(1080 * (curr_width + height))
 
         img = get_img(path, sizex, sizey)
 
