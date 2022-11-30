@@ -81,7 +81,7 @@ def themes_loop(n, args):
     theme.image = img
     theme.place(relx=0.5, rely=0.5, relwidth=curr_width, relheight=curr_width, anchor=customtkinter.CENTER)
 
-    theme.bind("<Button-1>", lambda x: save_choose(args["categories"][n]))
+    theme.bind("<Button-1>", lambda x: save_choose(args, args["used"], args["categories"][n]))
 
     resize_theme(n, theme, args)
 
@@ -120,7 +120,7 @@ def resize_theme(n, theme, args):
         args["anim_frame"].update()
 
     else:
-        if exists('theme.json'):
+        if args['finish']:
             theme_last_turn(n, args)
         else:
             n += 1

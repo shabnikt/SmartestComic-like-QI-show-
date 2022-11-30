@@ -15,7 +15,8 @@ def choose_category(event):
         widget.destroy()
 
     if categories:
-        args = {"score_frame": score_frame, "categories": sample(categories, 3), "cat_dict": cat_dict, "chooser": choosers[0]}
+        args = {"score_frame": score_frame, "categories": sample(set(categories) - set(used_categories), 3),
+                "cat_dict": cat_dict, "chooser": choosers[0], "used": used_categories, 'finish': False}
         animate_categories(app, args)
         choosers = choosers[1:] + [choosers[0]]
     else:
@@ -44,11 +45,18 @@ def choose_set_lab(event):
 
 
 def show_image(event):
-    for widget in qhost_question_frame.winfo_children():
-        widget.destroy()
-    img = get_img('media/categories/cats1.png')
-    question_bg.configure(image=img)
-    question_bg.image = img
+    try:
+        theme = used_categories[-1]
+        log.debug(theme)
+        img = get_img(f'media/question/images/{theme}.png', 1114, 590)
+
+        for widget in qhost_question_frame.winfo_children():
+            widget.destroy()
+
+        question_bg.configure(image=img)
+        question_bg.image = img
+    except Exception as e:
+        log.warning(f'Show image error: {e}')
 
 
 def show_question(event):
@@ -57,18 +65,20 @@ def show_question(event):
     question_bg.configure(image=que_img)
     question_bg.image = que_img
 
-    with open("theme.json", "r", encoding='utf-8') as theme_file:
-        theme = load(theme_file)['theme']
-    print(theme)
+    try:
+        theme = used_categories[-1]
+        log.debug(theme)
 
-    for widget in qhost_question_frame.winfo_children():
-        widget.destroy()
+        for widget in qhost_question_frame.winfo_children():
+            widget.destroy()
 
-    question = questions[theme]
-    question_label = tkinter.Label(master=qhost_question_frame, text='', bg=transparent_color, **question['widget'])
-    question_label.place(**question['place'], anchor=tkinter.CENTER)
-    text = question['text']
-    animate_text(text, question_label, lambda: delete_categories(cat_dict, questions, categories, theme))
+        question = questions[theme]
+        question_label = tkinter.Label(master=qhost_question_frame, text='', bg=transparent_color, **question['widget'])
+        question_label.place(**question['place'], anchor=tkinter.CENTER)
+        text = question['text']
+        animate_text(text, question_label, print)
+    except Exception as e:
+        log.warning(f'Show question error: {e}')
 
 
 # TABLE SCORE MOVEMENT
@@ -109,7 +119,7 @@ def change_score(player, value):
     players_list = list(sorted_dict.keys())
     log.debug(f'sorted one\n{sorted_dict}')
 
-    for b in buttons2+buttons1+buttons_1:
+    for b in buttons2 + buttons1 + buttons_1:
         b.configure(state='disabled')
 
     table_movement(players_list)
@@ -122,13 +132,13 @@ customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("blue")
 
 cat_dir, categories, cat_dict = get_categories()
+used_categories = list()
 
 with open(getenv('QUESTIONS'), "r", encoding='utf-8') as json:
     questions = load(json)
 
 with open("config.json", "r", encoding='utf-8') as json_mapping:
     config = load(json_mapping)
-
 
 # MAIN APP
 app = customtkinter.CTk()
@@ -137,7 +147,6 @@ app.attributes("-fullscreen", True)
 bg_img = get_img(getenv('BG_IMAGE'), 1920, 1080)
 bg_image = tkinter.Label(master=app, image=bg_img)
 bg_image.place(relx=0.5, rely=0.5, relheight=1, relwidth=1, anchor=customtkinter.CENTER)
-
 
 # QUESTIONS FRAME
 question_frame = customtkinter.CTkFrame(master=app, fg_color='#0c3653', bg_color='#000000', corner_radius=10)
@@ -164,7 +173,8 @@ score_window.wm_attributes("-transparentcolor", transparent_color)
 score_window.configure(background=transparent_color)
 score_window.attributes('-topmost', 'true')
 
-qhost_question_frame = customtkinter.CTkFrame(master=score_window, fg_color=transparent_color, bg_color=transparent_color, corner_radius=10)
+qhost_question_frame = customtkinter.CTkFrame(master=score_window, fg_color=transparent_color,
+                                              bg_color=transparent_color, corner_radius=10)
 qhost_question_frame.place(relx=0.5, rely=0.30, relwidth=0.58, relheight=0.546, anchor=customtkinter.CENTER)
 
 # TABLE FRAME
@@ -212,7 +222,6 @@ buttons_1 = [customtkinter.CTkButton(master=frames_list[i], **butt_1_dict,
 for button in buttons_1:
     button.place(**b_1place_dict, **anchor_dict)
 
-
 # LABELS
 names = config["names"]
 choosers = names
@@ -228,6 +237,5 @@ score_labels = [customtkinter.CTkLabel(master=frames_list[i], text=score_dict[fr
                 for i in range(4)]
 for score in score_labels:
     score.place(**splace_dict, **anchor_dict)
-
 
 app.mainloop()

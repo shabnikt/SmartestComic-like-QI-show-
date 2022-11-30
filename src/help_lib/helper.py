@@ -26,10 +26,11 @@ def get_img(path, sizex=1920, sizey=1080):
     return img
 
 
-def save_choose(theme):
+def save_choose(args, used_categories, theme):
     print(theme)
-    with open('theme.json', 'w') as json_file:
-        dump({"theme": theme}, json_file)
+    used_categories.append(theme)
+    args["finish"] = True
+
 
 
 def get_categories():
