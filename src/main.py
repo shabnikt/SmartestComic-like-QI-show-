@@ -6,6 +6,16 @@ from help_lib.categories_animation import *
 from help_lib.animation import animate_text, frame_animation
 
 
+def start_animation(gif):
+    frame_animation(gif, bg_image, app)
+    bg_image.configure(image=bg_img)
+    bg_image.image = bg_img
+
+    question_frame.place(relx=0.5, rely=0.30, relwidth=0.58, relheight=0.546, anchor=customtkinter.CENTER)
+    qhost_question_frame.place(relx=0.5, rely=0.30, relwidth=0.58, relheight=0.546, anchor=customtkinter.CENTER)
+    score_frame.place(relx=0.5, rely=0.8, relwidth=0.58, relheight=0.4, anchor=customtkinter.CENTER)
+
+
 def choose_category(event):
     global choosers
     score_frame.place_forget()
@@ -145,12 +155,13 @@ app = customtkinter.CTk()
 app.attributes("-fullscreen", True)
 
 bg_img = get_img(getenv('BG_IMAGE'), 1920, 1080)
-bg_image = tkinter.Label(master=app, image=bg_img)
+start_img = get_img("media/start.png", 1920, 1080)
+bg_image = tkinter.Label(master=app, image=start_img)
 bg_image.place(relx=0.5, rely=0.5, relheight=1, relwidth=1, anchor=customtkinter.CENTER)
+bg_image.bind('<Button-2>', lambda e: start_animation(getenv('START')))
 
 # QUESTIONS FRAME
 question_frame = customtkinter.CTkFrame(master=app, fg_color='#0c3653', bg_color='#000000', corner_radius=10)
-question_frame.place(relx=0.5, rely=0.30, relwidth=0.58, relheight=0.546, anchor=customtkinter.CENTER)
 
 que_img = get_img(getenv('QUESTION_BG'), 1114, 590)
 question_bg = tkinter.Label(master=question_frame, image=que_img)
@@ -175,11 +186,9 @@ score_window.attributes('-topmost', 'true')
 
 qhost_question_frame = customtkinter.CTkFrame(master=score_window, fg_color=transparent_color,
                                               bg_color=transparent_color, corner_radius=10)
-qhost_question_frame.place(relx=0.5, rely=0.30, relwidth=0.58, relheight=0.546, anchor=customtkinter.CENTER)
 
 # TABLE FRAME
 score_frame = customtkinter.CTkFrame(master=score_window, fg_color=bg, corner_radius=10)
-score_frame.place(relx=0.5, rely=0.8, relwidth=0.58, relheight=0.4, anchor=customtkinter.CENTER)
 
 frames_dict = {"master": score_frame}
 frames_dict.update(config["frames_dict"])
