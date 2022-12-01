@@ -7,13 +7,16 @@ from help_lib.animation import animate_text, frame_animation
 
 
 def start_animation(gif):
-    frame_animation(gif, bg_image, app)
-    bg_image.configure(image=bg_img)
-    bg_image.image = bg_img
+    global flag
+    if flag:
+        flag = False
+        frame_animation(gif, bg_image, app)
+        bg_image.configure(image=bg_img)
+        bg_image.image = bg_img
 
-    question_frame.place(relx=0.5, rely=0.30, relwidth=0.58, relheight=0.546, anchor=customtkinter.CENTER)
-    qhost_question_frame.place(relx=0.5, rely=0.30, relwidth=0.58, relheight=0.546, anchor=customtkinter.CENTER)
-    score_frame.place(relx=0.5, rely=0.8, relwidth=0.58, relheight=0.4, anchor=customtkinter.CENTER)
+        question_frame.place(relx=0.5, rely=0.30, relwidth=0.58, relheight=0.546, anchor=customtkinter.CENTER)
+        qhost_question_frame.place(relx=0.5, rely=0.30, relwidth=0.58, relheight=0.546, anchor=customtkinter.CENTER)
+        score_frame.place(relx=0.5, rely=0.8, relwidth=0.58, relheight=0.4, anchor=customtkinter.CENTER)
 
 
 def choose_category(event):
@@ -158,6 +161,7 @@ bg_img = get_img(getenv('BG_IMAGE'), 1920, 1080)
 start_img = get_img("media/start.png", 1920, 1080)
 bg_image = tkinter.Label(master=app, image=start_img)
 bg_image.place(relx=0.5, rely=0.5, relheight=1, relwidth=1, anchor=customtkinter.CENTER)
+flag = True
 bg_image.bind('<Button-2>', lambda e: start_animation(getenv('START')))
 
 # QUESTIONS FRAME

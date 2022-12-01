@@ -23,7 +23,7 @@ def animate_categories(app, args):
 
 
 def create_top_level(args):
-    transparent_color = '#fcfcfc'
+    transparent_color = '#b5b3b3'
     top = customtkinter.CTkToplevel(args["anim_frame"], fg_color=transparent_color)
     top.attributes("-fullscreen", True)
     top.wm_attributes("-transparentcolor", transparent_color)
@@ -32,7 +32,7 @@ def create_top_level(args):
 
     font_size = 2
 
-    label = customtkinter.CTkLabel(master=top, text=f'Выбирает категорию\n{args["chooser"]}', text_font=('Helvetica', font_size),
+    label = customtkinter.CTkLabel(master=top, text=f'Выбирает категорию\n{args["chooser"]}', text_font=('Calibri', font_size),
                                    text_color='#ffffff', fg_color=transparent_color, bg_color=transparent_color)
     label.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
 
