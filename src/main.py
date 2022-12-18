@@ -10,20 +10,37 @@ from help_lib.categories_animation import *
 from help_lib.animation import animate_text, frame_animation
 
 thread_sounds = dict()
+id_players = dict()
+used_players = list()
+
+
+def get_player():
+    for i in range(len(frames_list)):
+        if frames_list[i] not in used_players:
+            used_players.append(frames_list[i])
+            return frames_list[i], labels[i]
 
 
 def create_sound(player, filename):
-    thread_sounds[int(player)] = threading.Thread(target=playsound, args=(f"{getenv('WHISTLE')}/{filename}.wav",), daemon=True)
-    thread_sounds[int(player)].start()
+    thread_sounds[player] = threading.Thread(target=playsound, args=(f"{getenv('WHISTLE')}/{filename}.wav",), daemon=True)
+    thread_sounds[player].start()
 
 
 def receive():
     while True:
         try:
             data = receive_socket.recv(1024).decode("utf8")
-            player, filename = data.split("|")
-            if int(player) not in thread_sounds.keys() or not thread_sounds[int(player)].is_alive():
-                create_sound(player, filename)
+            d_type, player, name = data.split("|")
+            player = int(player)
+            if d_type == 'whistle':
+                if player not in thread_sounds.keys() or not thread_sounds[player].is_alive():
+                    create_sound(player, name)
+            elif d_type == 'reg':
+                if player not in id_players.keys():
+                    id_players[player] = get_player()
+                    id_players[player][1].configure(text=name)
+                else:
+                    id_players[player][1].configure(text=name)
         except OSError:
             break
 
