@@ -1,9 +1,27 @@
+import time
+from socket import AF_INET, socket, SOCK_STREAM
+from threading import Thread
+
 from json import load
 
 from help_lib.helper import *
 from help_lib.log_formatter import log
 from help_lib.categories_animation import *
 from help_lib.animation import animate_text, frame_animation
+
+
+def receive():
+    while True:
+        try:
+            msg = receive_socket.recv(1024).decode("utf8")
+            labels[1].configure(text=msg)
+        except OSError:
+            break
+
+
+def send(event=None):
+    msg = '417306088|Проверка. Random.'
+    send_socket.send(bytes(msg, "utf8"))
 
 
 def start_animation(gif):
@@ -27,9 +45,10 @@ def choose_category(event):
     for widget in qhost_question_frame.winfo_children():
         widget.destroy()
 
-    if len(used_categories) < 7:
-        args = {"score_frame": score_frame, "categories": sample(set(categories) - set(used_categories), 3),
+    if len(used_categories) < 6:
+        args = {"score_frame": score_frame, "categories": sample(set(categories) - set(used_categories), 5),
                 "cat_dict": cat_dict, "chooser": choosers[0], "used": used_categories, 'finish': False}
+        play_sound(getenv('THEME'))
         animate_categories(app, args)
         choosers = choosers[1:] + [choosers[0]]
     else:
@@ -42,8 +61,8 @@ def choose_category(event):
 
 
 def choose_set_lab(event):
-    theme = getenv('TEMP_CAT')
-
+    with open('theme.json', "r", encoding='utf-8') as json:
+        theme = load(json)['theme']
     question_bg.configure(image=que_img)
     question_bg.image = que_img
 
@@ -176,7 +195,7 @@ question_bg.bind('<Alt-Button-1>', show_question)
 question_bg.bind('<Alt-Button-3>', show_image)
 question_bg.bind('<Alt-Button-2>', choose_set_lab)
 question_bg.bind('<Control-Button-3>', lambda e: play_sound(getenv('THEME')))
-question_bg.bind('<Control-Alt-Button-3>', lambda e: play_sound(getenv('LOSER')))
+question_bg.bind('<Control-Button-2>', send)
 
 # =================================================================================================================
 transparent_color = bg
@@ -250,5 +269,17 @@ score_labels = [customtkinter.CTkLabel(master=frames_list[i], text=score_dict[fr
                 for i in range(4)]
 for score in score_labels:
     score.place(**splace_dict, **anchor_dict)
+
+# Connect to sockets
+receive_socket = socket(AF_INET, SOCK_STREAM)
+receive_socket.connect(("localhost", 8080))
+
+time.sleep(1)
+
+send_socket = socket(AF_INET, SOCK_STREAM)
+send_socket.connect(("localhost", 8000))
+
+receive_thread = Thread(target=receive)
+receive_thread.start()
 
 app.mainloop()

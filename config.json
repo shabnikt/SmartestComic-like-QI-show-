@@ -10,7 +10,7 @@
   "b1place_dict": {"relwidth": 0.07, "relheight": 0.566, "relx": 0.5, "rely": 0.5},
   "b_1place_dict": {"relwidth": 0.07, "relheight": 0.566, "relx": 0.42, "rely": 0.5},
 
-  "names": ["Настя", "Misha", "Данил", "Dima"],
+  "names": ["BigNastY", "Злидень", "Шпундель", "Болтяра"],
   "names_dict": {"width": 120, "height": 50, "fg_color": "#1f3d58", "text_color": "#ffffff", "text_font": ["Calibri", 30], "corner_radius": 8},
   "lplace_dict": {"relx": 0.1, "rely": 0.5},
   "splace_dict": {"relx": 0.9, "rely": 0.5}
