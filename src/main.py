@@ -9,12 +9,21 @@ from help_lib.log_formatter import log
 from help_lib.categories_animation import *
 from help_lib.animation import animate_text, frame_animation
 
+thread_sounds = dict()
+
+
+def create_sound(player, filename):
+    thread_sounds[int(player)] = threading.Thread(target=playsound, args=(f"{getenv('WHISTLE')}/{filename}.wav",), daemon=True)
+    thread_sounds[int(player)].start()
+
 
 def receive():
     while True:
         try:
-            msg = receive_socket.recv(1024).decode("utf8")
-            labels[1].configure(text=msg)
+            data = receive_socket.recv(1024).decode("utf8")
+            player, filename = data.split("|")
+            if int(player) not in thread_sounds.keys() or not thread_sounds[int(player)].is_alive():
+                create_sound(player, filename)
         except OSError:
             break
 
