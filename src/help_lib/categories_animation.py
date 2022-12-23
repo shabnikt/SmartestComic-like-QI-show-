@@ -118,7 +118,8 @@ def resize_theme(n, theme, args):
         args["anim_frame"].update()
 
     else:
-        if args['finish']:
+        if exists('theme.json'):
+            save_choose(args, args["used"], args["categories"][n])
             theme_last_turn(n, args)
         else:
             n += 1

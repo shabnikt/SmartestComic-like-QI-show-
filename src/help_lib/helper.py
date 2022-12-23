@@ -29,6 +29,7 @@ def get_img(path, sizex=1920, sizey=1080):
 def save_choose(args, used_categories, theme):
     print(theme)
     used_categories.append(theme)
+    remove('theme.json')
     args["finish"] = True
 
 

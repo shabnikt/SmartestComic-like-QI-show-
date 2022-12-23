@@ -55,7 +55,8 @@ def receive():
                     id_players[player][1].configure(text=name)
                 choosers.append(name)
             elif d_type == 'cat':
-                print(name)
+                with open('theme.json', 'w') as json_file:
+                    dump({"theme": name}, json_file)
             elif d_type == 'leave':
                 choosers.pop(choosers.index(name))
         except OSError:
