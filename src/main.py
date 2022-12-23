@@ -12,6 +12,7 @@ from help_lib.animation import animate_text, frame_animation
 thread_sounds = dict()
 id_players = dict()
 used_players = list()
+choosers = list()
 
 
 def get_player(name):
@@ -52,8 +53,11 @@ def receive():
                 else:
                     id_players[player] = (id_players[player][0], id_players[player][1], name)
                     id_players[player][1].configure(text=name)
+                choosers.append(name)
             elif d_type == 'cat':
                 print(name)
+            elif d_type == 'leave':
+                choosers.pop(choosers.index(name))
         except OSError:
             break
 
@@ -61,10 +65,11 @@ def receive():
 def send_cats(categories, chooser):
     for id_player in id_players.keys():
         if chooser in id_players[id_player]:
+            cats = ";".join(f'cat${c}:{questions[c]["butt"]}' for c in categories)
+            msg = f'{id_player}|{cats}'
+            send_socket.send(bytes(msg, "utf8"))
             break
-    cats = ";".join(f'cat${c}:{questions[c]["butt"]}' for c in categories)
-    msg = f'417306088|{cats}'
-    send_socket.send(bytes(msg, "utf8"))
+
 
 
 def start_animation(gif):
@@ -302,7 +307,7 @@ for button in buttons_1:
 
 # LABELS
 names = config["names"]
-choosers = names
+# choosers = names
 names_dict = config["names_dict"]
 lplace_dict = config["lplace_dict"]
 splace_dict = config["splace_dict"]
