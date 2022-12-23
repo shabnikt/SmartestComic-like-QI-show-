@@ -1,5 +1,5 @@
 {
-  "frames_dict": {"fg_color": "#1f3d58" ,"corner_radius": 10},
+  "frames_dict": {"fg_color": "#1f3d58" ,"corner_radius": 10, "border_color": "#1f3d58", "border_width": 3},
   "place_dict": {"relx": 0.5, "relwidth": 1, "relheight": 0.2},
 
   "butt2_dict": {"text": "", "fg_color": "#23a6f2"},

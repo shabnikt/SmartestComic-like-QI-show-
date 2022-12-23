@@ -14,16 +14,25 @@ id_players = dict()
 used_players = list()
 
 
-def get_player():
+def get_player(name):
     for i in range(len(frames_list)):
         if frames_list[i] not in used_players:
             used_players.append(frames_list[i])
-            return frames_list[i], labels[i]
+            return frames_list[i], labels[i], name
 
 
 def create_sound(player, filename):
-    thread_sounds[player] = threading.Thread(target=playsound, args=(f"{getenv('WHISTLE')}/{filename}.wav",), daemon=True)
+    thread_sounds[player] = Thread(target=playsound, args=(f"{getenv('WHISTLE')}/{filename}.wav",), daemon=True)
     thread_sounds[player].start()
+
+
+def standard_frame(frame):
+    frame.configure(border_color="#1f3d58")
+
+
+def light_frame(frame):
+    frame.configure(border_color="red")
+    frame.after(1000, standard_frame, frame)
 
 
 def receive():
@@ -35,18 +44,26 @@ def receive():
             if d_type == 'whistle':
                 if player not in thread_sounds.keys() or not thread_sounds[player].is_alive():
                     create_sound(player, name)
+                    light_frame(id_players[player][0])
             elif d_type == 'reg':
                 if player not in id_players.keys():
-                    id_players[player] = get_player()
+                    id_players[player] = get_player(name)
                     id_players[player][1].configure(text=name)
                 else:
+                    id_players[player] = (id_players[player][0], id_players[player][1], name)
                     id_players[player][1].configure(text=name)
+            elif d_type == 'cat':
+                print(name)
         except OSError:
             break
 
 
-def send(event=None):
-    msg = '417306088|Проверка. Random.'
+def send_cats(categories, chooser):
+    for id_player in id_players.keys():
+        if chooser in id_players[id_player]:
+            break
+    cats = ";".join(f'cat${c}:{questions[c]["butt"]}' for c in categories)
+    msg = f'417306088|{cats}'
     send_socket.send(bytes(msg, "utf8"))
 
 
@@ -75,6 +92,9 @@ def choose_category(event):
         args = {"score_frame": score_frame, "categories": sample(set(categories) - set(used_categories), 5),
                 "cat_dict": cat_dict, "chooser": choosers[0], "used": used_categories, 'finish': False}
         play_sound(getenv('THEME'))
+
+        send_cats(args["categories"], args["chooser"])
+
         animate_categories(app, args)
         choosers = choosers[1:] + [choosers[0]]
     else:
@@ -221,7 +241,7 @@ question_bg.bind('<Alt-Button-1>', show_question)
 question_bg.bind('<Alt-Button-3>', show_image)
 question_bg.bind('<Alt-Button-2>', choose_set_lab)
 question_bg.bind('<Control-Button-3>', lambda e: play_sound(getenv('THEME')))
-question_bg.bind('<Control-Button-2>', send)
+question_bg.bind('<Control-Button-2>', send_cats)
 
 # =================================================================================================================
 transparent_color = bg
