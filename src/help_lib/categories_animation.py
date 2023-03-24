@@ -1,6 +1,7 @@
 import customtkinter
 import tkinter
 
+from json import load
 from os import getenv
 from os.path import exists
 from help_lib.animation import frame_animation
@@ -80,7 +81,7 @@ def themes_loop(n, args):
     theme.image = img
     theme.place(relx=0.5, rely=0.5, relwidth=curr_width, relheight=curr_width, anchor=customtkinter.CENTER)
 
-    theme.bind("<Button-1>", lambda x: save_choose(args, args["used"], args["categories"][n]))
+    # theme.bind("<Button-1>", lambda x: save_choose(args, args["used"], args["categories"][n]))
 
     resize_theme(n, theme, args)
 
@@ -119,19 +120,21 @@ def resize_theme(n, theme, args):
 
     else:
         if exists('theme.json'):
-            save_choose(args, args["used"], args["categories"][n])
-            theme_last_turn(n, args)
+            with open('theme.json', "r", encoding='utf-8') as json:
+                choose_cat = load(json)['theme']
+            save_choose(args, args["used"], choose_cat)
+            theme_last_turn(n, args, choose_cat)
         else:
             n += 1
             themes_loop(n, args)
 
 
-def theme_last_turn(n, args):
+def theme_last_turn(n, args, choose_cat):
     curr_width = 0.4
     sizex = int(1920 * curr_width)
     sizey = int(1080 * curr_width)
 
-    path = args["cat_dict"][args["categories"][n]][1]
+    path = args["cat_dict"][choose_cat][1]
     img = get_img(path, sizex, sizey)
 
     theme = tkinter.Label(master=args["anim_frame"], background='#212325', image=img)
