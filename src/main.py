@@ -94,6 +94,10 @@ def choose_category(event):
         widget.destroy()
 
     if len(used_categories) < 6:
+        log.debug(categories)
+        log.debug(used_categories)
+        log.debug(cat_dict)
+        log.debug(choosers)
         args = {"score_frame": score_frame, "categories": sample(set(categories) - set(used_categories), 5),
                 "cat_dict": cat_dict, "chooser": choosers[0], "used": used_categories, 'finish': False}
         play_sound(getenv('THEME'))
@@ -243,10 +247,10 @@ question_bg.place(relx=0.5, rely=0.5, relheight=1, relwidth=1, anchor=customtkin
 
 question_bg.bind('<Control-Button-1>', choose_category)
 question_bg.bind('<Alt-Button-1>', show_question)
-question_bg.bind('<Alt-Button-3>', show_image)
-question_bg.bind('<Alt-Button-2>', choose_set_lab)
-question_bg.bind('<Control-Button-3>', lambda e: play_sound(getenv('THEME')))
-question_bg.bind('<Control-Button-2>', send_cats)
+question_bg.bind('<Alt-Button-3>', lambda e: show_extra('winner'))
+# question_bg.bind('<Alt-Button-3>', choose_set_lab)
+question_bg.bind('<Control-Button-2>', lambda e: play_sound(getenv('TIMER')))
+question_bg.bind('<Control-Button-3>', lambda e: show_extra('loser'))
 
 # =================================================================================================================
 transparent_color = bg
