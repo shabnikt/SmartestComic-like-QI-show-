@@ -168,6 +168,30 @@ def show_question(event):
         log.warning(f'Show question error: {e}')
 
 
+def update_countdown(timer_frame, countdown, count):
+    if count == 14:
+        play_sound(getenv('TIMER'))
+    countdown.configure(text=str(count))
+    if count > 0:
+        countdown.after(1000, update_countdown, timer_frame, countdown, count - 1)
+    else:
+        timer_frame.destroy()
+
+
+def show_extra(theme):
+    question_bg.configure(image=que_img)
+    question_bg.image = que_img
+
+    with open(getenv('QUESTIONS'), "r", encoding='utf-8') as json:
+        que = load(json)[theme]
+
+    for widget in qhost_question_frame.winfo_children():
+        widget.destroy()
+
+    question_label = tkinter.Label(master=qhost_question_frame, text=que['text'], bg=transparent_color, **que['widget'])
+    question_label.place(**que['place'], anchor=tkinter.CENTER)
+
+
 # TABLE SCORE MOVEMENT
 def table_movement(players_list):
     temp_old_relys = [float(_.place_info()['rely']) for _ in players_list]
